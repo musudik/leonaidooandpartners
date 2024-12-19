@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   HomeIcon,
-  CircleDollarSign,
+  Briefcase,
   FileText,
   Wallet,
   ShieldCheck,
@@ -20,7 +20,7 @@ import {
   Hospital,
   LandPlot,
   CircleUserRound,
-  Menu
+  Menu,
 } from 'lucide-react';
 import logo from './../assets/LEONAIDOO.png';
 
@@ -46,7 +46,8 @@ const MenuItem = ({ item, isActive }) => {
       liability: <AlertTriangle className="w-6 h-6 text-[#f987008c]" />,
       disability: <Hospital className="w-6 h-6 text-[#f987008c]" />,
       land: <LandPlot className="w-6 h-6 text-[#f987008c]" />,
-      personal: <CircleUserRound className="w-6 h-6 text-[#f987008c]" />
+      personal: <CircleUserRound className="w-6 h-6 text-[#f987008c]" />,
+      briefcase: <Briefcase className="w-6 h-6 text-[#f987008c]" />,
     };
     return icons[iconName] || <HomeIcon className="w-6 h-6 text-[#f987008c]" />;
   };
@@ -86,9 +87,15 @@ const Navbar = () => {
       path: '/',
     },
     {
-      name: 'Search',
-      icon: 'search',
-      path: '/search',
+        name: 'Insurance',
+        icon: 'insurance',
+        path: '/insurance',
+        subItems: [
+          { name: 'Health Insurance', icon: 'health', path: '/insurance/health' },
+          { name: 'Car Insurance', icon: 'car', path: '/insurance/car' },
+          { name: 'Liability Insurance', icon: 'liability', path: '/insurance/liability' },
+          { name: 'Disability Insurance', icon: 'disability', path: '/insurance/disability' },
+        ],
     },
     {
       name: 'Loans',
@@ -96,42 +103,36 @@ const Navbar = () => {
       path: '/loans',
       subItems: [
         { name: 'Personal Loans', icon: 'personal', path: '/loans/personal' },
-        { name: 'Home Loans', icon: 'realEstate', path: '/loans/home' },
-        { name: 'Business Loans', icon: 'bankAccounts', path: '/loans/business' },
+        { name: 'Business Loans', icon: 'briefcase', path: '/loans/business' },
         { name: 'Student Loans', icon: 'student', path: '/loans/student' },
       ],
     },
     {
-      name: 'Insurance',
-      icon: 'insurance',
-      path: '/insurance',
-      subItems: [
-        { name: 'Health Insurance', icon: 'health', path: '/insurance/health' },
-        { name: 'Car Insurance', icon: 'car', path: '/insurance/car' },
-        { name: 'Liability Insurance', icon: 'liability', path: '/insurance/liability' },
-        { name: 'Disability Insurance', icon: 'disability', path: '/insurance/disability' },
-      ],
+        name: 'Pension & Retirement',
+        icon: 'pension',
+        path: '/pension-retirement',
     },
     {
-      name: 'Electricity',
-      icon: 'electricity',
-      path: '/electricity',
+        name: 'Real Estate',
+        icon: 'realEstate',
+        path: '/real-estate',
+        subItems: [
+            { name: 'Properties', icon: 'personal', path: '/loans/personal' },
+            { name: 'Real Estate Finance', icon: 'realEstate', path: '/loans/home' },
+          ],
     },
     {
-      name: 'Gold',
-      icon: 'gold',
-      path: '/gold',
+        name: 'Other Services',
+        icon: 'CircleDollarSign',
+        path: '/other-services',
+        subItems: [
+          { name: 'Tax Services', icon: 'tax', path: '/tax' },
+          { name: 'Gold', icon: 'gold', path: '/gold' },
+          { name: 'Electricity', icon: 'electricity', path: '/electricity' },
+          { name: 'Bank Accounts', icon: 'bankAccounts', path: '/bank-accounts' },
+        ],
     },
-    {
-      name: 'Real Estate',
-      icon: 'realEstate',
-      path: '/real-estate',
-    },
-    {
-      name: 'Bank Accounts',
-      icon: 'bankAccounts',
-      path: '/bank-accounts',
-    },
+    
   ];
 
   return (

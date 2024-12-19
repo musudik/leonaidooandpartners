@@ -2,22 +2,26 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Search from './components/Search';
 import Loans from './components/Loans';
-import Navbar from './components/Navbar';
+import PensionRetirement from './components/PensionRetirement';
+import Navbar from './components/Navbar'; 
+import Footer from './components/Footer';
 // Import other components
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="layout-wrapper">
         <Navbar />
-          <main>
+          <main className="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
               <Route path="/loans/*" element={<Loans />} />
+              <Route path="/pension-retirement" element={<PensionRetirement />} />
               {/* Add other routes */}
             </Routes>
           </main>
+          <Footer />
       </div>
     </Router>
   );

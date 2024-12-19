@@ -2,8 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply antialiased text-gray-900;
-  }
+:root {
+  --primary-bg: #fbfbfb94;
+  --navbar-height: 8rem;
+}
+
+body {
+  background-color: var(--primary-bg);
+  min-height: 100vh;
+}
+
+.page-container {
+  margin-top: var(--navbar-height);
+  min-height: calc(100vh - var(--navbar-height));
+  padding: 1rem;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex-shrink: 0;
 } 

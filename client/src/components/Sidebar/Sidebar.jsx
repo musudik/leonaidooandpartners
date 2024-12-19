@@ -29,26 +29,26 @@ const MenuItem = ({ item, isActive }) => {
   
   const getIcon = (iconName) => {
     const icons = {
-      home: <HomeIcon className="w-8 h-8 text-[#f987008c]" />,
-      pension: <Clock className="w-8 h-8 text-[#f987008c]" />,
-      tax: <FileText className="w-8 h-8 text-[#f987008c]" />,
-      loans: <Wallet className="w-8 h-8 text-[#f987008c]" />,
-      insurance: <ShieldCheck className="w-8 h-8 text-[#f987008c]" />,
-      electricity: <Zap className="w-8 h-8 text-[#f987008c]" />,
-      gold: <Coins className="w-8 h-8 text-[#f987008c]" />,
-      realEstate: <Building2 className="w-8 h-8 text-[#f987008c]" />,
-      bankAccounts: <BuildingIcon className="w-8 h-8 text-[#f987008c]" />,
-      search: <Search className="w-8 h-8 text-[#f987008c]" />,
-      video: <PlayCircle className="w-8 h-8 text-[#f987008c]" />,
-      student: <GraduationCap className="w-8 h-8 text-[#f987008c]" />,
-      car: <Car className="w-8 h-8 text-[#f987008c]" />,
-      health: <Heart className="w-8 h-8 text-[#f987008c]" />,
-      liability: <AlertTriangle className="w-8 h-8 text-[#f987008c]" />,
-      disability: <Hospital className="w-8 h-8 text-[#f987008c]" />,
-      land: <LandPlot className="w-8 h-8 text-[#f987008c]" />,
-      personal: <CircleUserRound className="w-8 h-8 text-[#f987008c]" />
+      home: <HomeIcon className="w-8 h-8 text-[#f987004a]" />,
+      pension: <Clock className="w-8 h-8 text-[#f987004a]" />,
+      tax: <FileText className="w-8 h-8 text-[#f987004a]" />,
+      loans: <Wallet className="w-8 h-8 text-[#f987004a]" />,
+      insurance: <ShieldCheck className="w-8 h-8 text-[#f987004a]" />,
+      electricity: <Zap className="w-8 h-8 text-[#f987004a]" />,
+      gold: <Coins className="w-8 h-8 text-[#f987004a]" />,
+      realEstate: <Building2 className="w-8 h-8 text-[#f987004a]" />,
+      bankAccounts: <BuildingIcon className="w-8 h-8 text-[#f987004a]" />,
+      search: <Search className="w-8 h-8 text-[#f987004a]" />,
+      video: <PlayCircle className="w-8 h-8 text-[#f987004a]" />,
+      student: <GraduationCap className="w-8 h-8 text-[#f987004a]" />,
+      car: <Car className="w-8 h-8 text-[#f987004a]" />,
+      health: <Heart className="w-8 h-8 text-[#f987004a]" />,
+      liability: <AlertTriangle className="w-8 h-8 text-[#f987004a]" />,
+      disability: <Hospital className="w-8 h-8 text-[#f987004a]" />,
+      land: <LandPlot className="w-8 h-8 text-[#f987004a]" />,
+      personal: <CircleUserRound className="w-8 h-8 text-[#f987004a]" />
     };
-    return icons[iconName] || <HomeIcon className="w-8 h-8 text-[#f987008c]" />;
+    return icons[iconName] || <HomeIcon className="w-8 h-8 text-[#f987004a]" />;
   };
 
   return (
@@ -56,7 +56,7 @@ const MenuItem = ({ item, isActive }) => {
       <Link to={item.path}>
         <div
           className={`flex items-center justify-between px-6 py-3 cursor-pointer rounded-lg
-            ${isActive ? 'bg-[#f987008c]/5 text-[#f987008c]' : 'hover:bg-[#f987008c]/5 text-gray-700'}`}
+            ${isActive ? 'bg-[#f987004a]/5 text-[#f987004a]' : 'hover:bg-[#f987004a]/5 text-gray-700'}`}
           onClick={(e) => {
             if (item.subItems) {
               e.preventDefault();
@@ -83,7 +83,7 @@ const MenuItem = ({ item, isActive }) => {
             <Link to={subItem.path} key={index}>
               <div
                 className={`flex items-center gap-4 px-6 py-3 text-base rounded-lg cursor-pointer
-                  ${subItem.isActive ? 'bg-[#f987008c]/5 text-[#f987008c]' : 'hover:bg-[#f987008c]/5 text-gray-600'}`}
+                  ${subItem.isActive ? 'bg-[#f987004a]/5 text-[#f987004a]' : 'hover:bg-[#f987004a]/5 text-gray-600'}`}
               >
                 {getIcon(subItem.icon)}
                 {subItem.name}
@@ -165,11 +165,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-80 h-screen bg-[#f987008c] text-white fixed left-0 top-0 overflow-y-auto">
+    <div className="w-80 h-screen bg-[#f987004a] text-white fixed left-0 top-0 overflow-y-auto">
       <div className="p-6">
         <div className="mb-10">
           <img src={logo} alt="Leonaidoo & Partners" className="w-30 h-30" />
-          <h1 className="text-2xl font-bold text-[#f987008c] mt-4">Leonaidoo & Partners</h1>
+          <h1 className="text-2xl font-bold text-[#f987004a] mt-4">Leonaidoo & Partners</h1>
         </div>
         <div className="space-y-2">
           {menuItems.map((item, index) => (
