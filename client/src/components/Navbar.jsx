@@ -21,6 +21,7 @@ import {
   LandPlot,
   CircleUserRound,
   Menu,
+  Gift,
 } from 'lucide-react';
 import logo from './../assets/LEONAIDOO.png';
 
@@ -48,6 +49,8 @@ const MenuItem = ({ item, isActive }) => {
       land: <LandPlot className="w-6 h-6 text-[#f987008c]" />,
       personal: <CircleUserRound className="w-6 h-6 text-[#f987008c]" />,
       briefcase: <Briefcase className="w-6 h-6 text-[#f987008c]" />,
+      gift: <Gift className="w-6 h-6 text-[#f987008c]" />,
+
     };
     return icons[iconName] || <HomeIcon className="w-6 h-6 text-[#f987008c]" />;
   };
@@ -130,6 +133,7 @@ const Navbar = () => {
           { name: 'Gold', icon: 'gold', path: '/gold' },
           { name: 'Electricity', icon: 'electricity', path: '/electricity' },
           { name: 'Bank Accounts', icon: 'bankAccounts', path: '/bank-accounts' },
+          { name: 'Sponsored Events', icon: 'gift', path: '/bank-accounts' },
         ],
     },
     

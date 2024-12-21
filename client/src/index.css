@@ -31,3 +31,14 @@ body {
 .footer {
   flex-shrink: 0;
 } 
+
+/* Hero Image Styles */
+.hero-image {
+  align-items: center;
+  margin-top: -70px; /* Space between buttons and image */
+}
+
+.hero-image img {
+  max-width: 100%; /* Responsive image */
+  height: auto; /* Maintain aspect ratio */
+}

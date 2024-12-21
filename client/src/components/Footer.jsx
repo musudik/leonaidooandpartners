@@ -3,7 +3,7 @@ import { Facebook, Twitter, Linkedin, Youtube, MessageCircle, Instagram } from '
 
 const Footer = ({ className }) => {
   return (
-    <footer className={`bg-[#020202fc] text-white ${className}`}>
+    <footer className={`bg-[#212121] text-white ${className}`}>
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

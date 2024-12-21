@@ -17,7 +17,7 @@ const PensionRetirement = () => {
           <p className="text-gray-700 mb-6">
             We analyze your current financial standing, future aspirations, and market trends to build a robust retirement plan. From pensions and annuities to long-term investment vehicles, we ensure your golden years are stress-free and financially secure. Don’t leave your future to chance—connect with us today for a personalized consultation.
           </p>
-          <button className="bg-[#f9b44a] text-white px-6 py-3 rounded-full font-medium hover:bg-[#f9a53a] transition-colors">
+          <button className="bg-[#774800] text-white px-6 py-3 rounded-full font-medium hover:bg-[#f9a53a] transition-colors">
             Learn More
           </button>
         </div>
