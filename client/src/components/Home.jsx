@@ -59,6 +59,93 @@ const PartnerImage = styled.img`
   }
 `;
 
+const MemberImage = styled.div`
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  background-color: #e5e5e5;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(119, 72, 0, 0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #774800;
+    border-radius: 50%;
+    transform: translate(20%, 20%);
+    z-index: 2;
+  }
+`;
+
+const ProfileDetails = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: all 0.3s ease;
+  width: 200px;
+  z-index: 3;
+  
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #333;
+  }
+`;
+
+const TeamMember = styled.div`
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-10px);
+    
+    ${MemberImage} {
+      &::before {
+        opacity: 1;
+      }
+    }
+    
+    ${ProfileDetails} {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 const TeamSection = styled.div`
   padding: 4rem 0;
   text-align: center;
@@ -94,38 +181,6 @@ const TeamGrid = styled.div`
   }
 `;
 
-const TeamMember = styled.div`
-  text-align: center;
-`;
-
-const MemberImage = styled.div`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  overflow: hidden;
-  background-color: #e5e5e5;
-  position: relative;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    background-color: #774800;
-    border-radius: 50%;
-    transform: translate(20%, 20%);
-  }
-`;
-
 const MemberName = styled.h3`
   font-weight: bold;
   margin: 0.5rem 0;
@@ -152,58 +207,48 @@ const Profile = () => {
     {
       name: "STEVE AMBUUL",
       title: "CHIEF MEMBER OFFICER",
-      image: profile1
+      image: profile1,
+      email: "steve@example.com",
+      phone: "+1 234 567 890",
+      description: "Over 15 years of experience in financial services and team leadership."
     },
     {
       name: "ALDEN DALE",
       title: "DIRECTOR OF SOLUTIONS",
-      image: profile2
+      image: profile2,
+      email: "alden@example.com",
+      phone: "+1 234 567 891",
+      description: "Specialized in developing innovative financial solutions for clients."
     },
     {
       name: "KALEY",
       title: "DIRECTOR OF STRATEGY & SERVICE, EMEA",
-      image: profile3
+      image: profile3,
+      email: "kaley@example.com",
+      phone: "+1 234 567 892",
+      description: "Expert in EMEA market strategy and client relations."
     },
     {
       name: "PHIL DUPERUIS",
       title: "DIRECTOR OF CLIENT SERVICES, NA",
-      image: profile4
+      image: profile4,
+      email: "phil@example.com",
+      phone: "+1 234 567 893",
+      description: "Focused on delivering exceptional client service in North America."
     },
     {
       name: "TONY EADES",
       title: "CHIEF EVANGELIST",
-      image: profile1 
-    },
-    {
-      name: "STEVE AMBUUL",
-      title: "CHIEF MEMBER OFFICER",
-      image: profile4
-    },
-    {
-      name: "ALDEN DALE",
-      title: "DIRECTOR OF SOLUTIONS",
-      image: profile1 
-    },
-    {
-      name: "KALEY",
-      title: "DIRECTOR OF STRATEGY & SERVICE, EMEA",
-      image: profile4 
-    },
-    {
-      name: "PHIL DUPERUIS",
-      title: "DIRECTOR OF CLIENT SERVICES, NA",
-      image: profile3 
-    },
-    {
-      name: "TONY EADES",
-      title: "CHIEF EVANGELIST",
-      image: profile2 
+      image: profile1,
+      email: "tony@example.com",
+      phone: "+1 234 567 894",
+      description: "Passionate about spreading financial literacy and client education."
     }
   ];
 
   return (
     <div className="page-container bg-white min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-0">
         {/* Hero Section */}
         <Carousel />
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -256,6 +301,11 @@ const Profile = () => {
                 </MemberImage>
                 <MemberName>{member.name}</MemberName>
                 <MemberTitle>{member.title}</MemberTitle>
+                <ProfileDetails>
+                  <p><strong>Email:</strong> {member.email}</p>
+                  <p><strong>Phone:</strong> {member.phone}</p>
+                  <p>{member.description}</p>
+                </ProfileDetails>
               </TeamMember>
             ))}
           </TeamGrid>

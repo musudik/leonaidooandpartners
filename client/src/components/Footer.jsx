@@ -5,11 +5,11 @@ const Footer = ({ className }) => {
   return (
     <footer className={`bg-[#212121] text-white ${className}`}>
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 text-sm">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Quick Product Search */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Subscribe to our newsletter</h3>
+            <h3 className="text-lg font-semibold mb-4 text-sm">Subscribe to our newsletter</h3>
             <form className="space-y-4">
               <div className="flex gap-2">
                 <input 
@@ -76,12 +76,12 @@ const Footer = ({ className }) => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="border-t border-white/10">
+      <div className="border-t border-white/10 text-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <nav className="flex flex-wrap gap-4">
             </nav>
-            <nav className="flex flex-wrap gap-4">
+            <nav className="flex flex-wrap gap-4 text-gray-600">
               <span>© 2024 leonaidoo.com All Rights Reserved.</span>
               <Link to="/privacy" className="hover:text-[#f987008c]">Privacy Policy</Link>
               <Link to="/terms" className="hover:text-[#f987008c]">Terms of Use</Link>
