@@ -4,7 +4,8 @@ import Search from './components/Search';
 import Loans from './components/Loans';
 import PensionRetirement from './components/PensionRetirement';
 import Navbar from './components/Navbar'; 
-import Footer from './components/Footer';
+import Footer from './components/Footer'; 
+import About from './components/About';
 // Import other components
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
               <Route path="/search" element={<Search />} />
               <Route path="/loans/*" element={<Loans />} />
               <Route path="/pension-retirement" element={<PensionRetirement />} />
-              {/* Add other routes */}
+              <Route path="/about" element={<About />} />
             </Routes>
           </main>
           <Footer />

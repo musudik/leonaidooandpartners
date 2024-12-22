@@ -22,6 +22,7 @@ import {
   CircleUserRound,
   Menu,
   Gift,
+  Contact
 } from 'lucide-react';
 import logo from './../assets/LEONAIDOO.png';
 
@@ -50,7 +51,7 @@ const MenuItem = ({ item, isActive }) => {
       personal: <CircleUserRound className="w-6 h-6 text-[#f987008c]" />,
       briefcase: <Briefcase className="w-6 h-6 text-[#f987008c]" />,
       gift: <Gift className="w-6 h-6 text-[#f987008c]" />,
-
+      contact: <Contact className="w-6 h-6 text-[#f987008c]" />,
     };
     return icons[iconName] || <HomeIcon className="w-6 h-6 text-[#f987008c]" />;
   };
@@ -136,7 +137,11 @@ const Navbar = () => {
           { name: 'Sponsored Events', icon: 'gift', path: '/bank-accounts' },
         ],
     },
-    
+    {
+        name: 'About',
+        icon: 'contact',
+        path: '/about',
+    },
   ];
 
   return (
