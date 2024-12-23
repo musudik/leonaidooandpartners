@@ -13,6 +13,8 @@ import profile3 from '../assets/3.jpg';
 import profile4 from '../assets/4.jpg';
 import TeamMember from './TeamMember';
 import { Link } from 'react-router-dom';
+import ContactForm from './ContactForm';
+import { useState } from 'react';
 
 const TeamSection = styled.div`
   padding: 4rem 0;
@@ -168,6 +170,8 @@ const PartnersGrid = styled.div`
 `;
 
 const Profile = () => {
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
   const partners = [
     { src: Badenia, alt: "Badenia" },
     { src: DeutscheBank, alt: "Deutsche Bank" },
@@ -311,15 +315,17 @@ const Profile = () => {
 
             {/* Why Choose Us Section */}
             <WhyChooseSection>
-              <ServiceTitle><span className="text-[#774800]">Why Choose Us? </span></ServiceTitle>
-              <p className="text-sm text-gray-600 mx-auto leading-relaxed">
+              <ServiceTitle>Why Choose Us?</ServiceTitle>
+              <p className="text-sm text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey. 
                 From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential.
               </p>
               <p className="text-sm font-medium text-gray-700 mt-4">
-                <span className="text-[#774800]">Your financial success starts here. Let's shape your future – together. </span>
+                Your financial success starts here. Let's shape your future – together.
               </p>
-              <ContactButton>GET CONTACT</ContactButton>
+              <ContactButton onClick={() => setIsContactFormOpen(true)}>
+                GET CONTACT
+              </ContactButton>
             </WhyChooseSection>
           </div>
         </div>
@@ -348,6 +354,11 @@ const Profile = () => {
           </TeamGrid>
         </TeamSection>
       </div>
+
+      <ContactForm 
+        isOpen={isContactFormOpen} 
+        onClose={() => setIsContactFormOpen(false)} 
+      />
     </div>
   );
 };
