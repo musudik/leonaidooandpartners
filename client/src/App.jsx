@@ -7,7 +7,10 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer'; 
 import About from './components/About';
 import TaxReturns from './components/TaxReturns';
-// Import other components
+import Insurance from './components/Insurance';
+import EnergySavings from './components/EnergySavings';
+import WealthBuilding from './components/WealthBuilding';
+import Banking from './components/Banking';
 
 function App() {
   return (
@@ -22,6 +25,10 @@ function App() {
               <Route path="/pension-retirement" element={<PensionRetirement />} />
               <Route path="/tax-returns" element={<TaxReturns />} />
               <Route path="/about" element={<About />} />
+              <Route path="/insurance" element={<Insurance />} />
+              <Route path="/energy-savings" element={<EnergySavings />} />
+              <Route path="/wealth-building" element={<WealthBuilding />} />
+              <Route path="/banking" element={<Banking />} />
             </Routes>
           </main>
           <Footer />

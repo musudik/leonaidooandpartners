@@ -12,53 +12,7 @@ import profile2 from '../assets/2.jpg';
 import profile3 from '../assets/3.jpg';
 import profile4 from '../assets/4.jpg';
 import TeamMember from './TeamMember';
-
-
-const PartnersContainer = styled.div`
-  background-color: #f9f5f0; // Light beige background that complements the theme
-  padding: 2rem 0;
-  overflow: hidden;
-  position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background-color: #774800; // Theme color strip at the top
-  }
-`;
-
-const ScrollingWrapper = styled.div`
-  display: flex;
-  animation: scroll 30s linear infinite;
-  
-  &:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-`;
-
-const PartnerImage = styled.img`
-  height: 40px;
-  margin: 0 2rem;
-  opacity: 0.9;
-  transition: opacity 0.3s;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
+import { Link } from 'react-router-dom';
 
 const TeamSection = styled.div`
   padding: 4rem 0;
@@ -67,7 +21,6 @@ const TeamSection = styled.div`
 
 const TeamHeader = styled.h2`
   font-size: 2.5rem;
-  margin-bottom: 3rem;
   
   span {
     font-weight: bold;
@@ -92,6 +45,125 @@ const TeamGrid = styled.div`
   
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+  }
+`;
+
+const ServicesSection = styled.section`
+  max-width: 900px;
+  margin: 0 auto;
+`;
+
+const ServiceTitle = styled.h2`
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+`;
+
+const ServiceLink = styled(Link)`
+  text-decoration: none;
+  display: block;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #f9f5f0;
+    transform: translateX(10px);
+    box-shadow: 0 2px 8px rgba(119, 72, 0, 0.1);
+    
+    h3 {
+      color: #8b5500;
+    }
+  }
+`;
+
+const ServiceItem = styled.div`
+  margin-bottom: 1.2rem;
+  
+  h3 {
+    color: #774800;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: inline-block;
+    transition: color 0.3s ease;
+  }
+  
+  p {
+    color: #555;
+    font-size: 0.95rem;
+    display: inline;
+  }
+`;
+
+const SubServiceList = styled.ul`
+  list-style: none;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+`;
+
+const SubServiceItem = styled.li`
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  
+  strong {
+    color: #774800;
+    font-style: normal;
+  }
+`;
+
+const WhyChooseSection = styled.section`
+  padding: 2rem 0;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+`;
+
+const ContactButton = styled.button`
+  background: #774800;
+  color: white;
+  padding: 0.7rem 2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(119, 72, 0, 0.15);
+  margin: 2rem 0;
+
+  &:hover {
+    background: #8b5500;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(119, 72, 0, 0.2);
+  }
+`;
+
+const PartnersSection = styled.div`
+  background: #f9f5f0;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 3px solid #774800;
+`;
+
+const PartnersGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  img {
+    height: 35px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 `;
 
@@ -152,43 +224,118 @@ const Profile = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-0">
         {/* Hero Section */}
         <Carousel />
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid gap-12 items-center">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Contact
-            </h1>
-            <p className="text-gray-600 mb-8">
-              We're here to help and answer any question you might have. We look forward to hearing from you. Feel free to reach out to us anytime, we'll get back to you as soon as possible.
+            {/* Header Section */}
+            <div className="mt-16">
+              <h3 className="text-6xl font-black mb-2">
+                <span className="text-[#774800]">Leo Naidoo </span>
+                <span className="text-gray-200 ml-2">& Partners</span>
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-2">
+              <b><span className="text-[#774800]">Welcome to Leo Naidoo & Partners: Your Trusted Ally in Financial Freedom </span>
+              </b>
+              <p>At Leo Naidoo & Partners, we're more than financial advisors – we're your partners in building a secure, 
+                successful, and stress-free future. Whether you're planning for retirement, navigating taxes, 
+                or exploring loans, our expert team is here to guide you every step of the way.</p>
             </p>
-            <button className="bg-[#774800] text-white px-6 py-3 rounded-full font-medium hover:bg-[#f9a53a] transition-colors">
-              GET CONTACT
-            </button>
-          </div>
-          <div className="relative">
-            <img 
-              width="500px"
-              height="500px"
-              src={servicesImg} 
-              alt="Profile" 
-              className="w-full h-auto rounded-2xl"
-            />
+
+            {/* What We Offer Section */}
+            <ServicesSection>
+              <ServiceTitle>What We Offer</ServiceTitle>
+              
+              <ServiceLink to="/pension-retirement">
+                <ServiceItem>
+                  <h3>Pension & Retirement Planning:</h3>
+                  <SubServiceList>
+                    <SubServiceItem>Secure your golden years with tailored plans that prioritize your dreams and peace of mind.</SubServiceItem>
+                  </SubServiceList>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/tax-returns">
+                <ServiceItem>
+                  <h3>Tax Services:</h3>
+                  <SubServiceList>
+                    <SubServiceItem>Simplify tax season with strategies that maximize your benefits while ensuring compliance.</SubServiceItem>
+                  </SubServiceList>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/loans">
+                <ServiceItem>
+                  <h3>Loans Made Simple:</h3>
+                  <SubServiceList>
+                    <SubServiceItem><strong>Personal Loans</strong> for life's moments that matter.</SubServiceItem>
+                    <SubServiceItem><strong>Home/Real Estate Loans</strong> to turn your dream home into reality.</SubServiceItem>
+                    <SubServiceItem><strong>Business Loans</strong> to fuel your entrepreneurial ambitions.</SubServiceItem>
+                    <SubServiceItem><strong>Student Loans</strong> to invest in a brighter future.</SubServiceItem>
+                  </SubServiceList>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/insurance">
+                <ServiceItem>
+                  <h3>Insurance Solutions:</h3>
+                  <SubServiceList>
+                    <SubServiceItem>Protect your health, assets, and peace of mind with comprehensive <em>Health, Car, Liability,</em> and <em>Disability Insurance</em>.</SubServiceItem>
+                  </SubServiceList>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/energy-savings">
+                <ServiceItem>
+                  <h3>Energy Savings:</h3>
+                  <p>Slash your electricity bills with customized energy reduction strategies.</p>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/wealth-building">
+                <ServiceItem>
+                  <h3>Wealth Building:</h3>
+                  <SubServiceList>
+                    <SubServiceItem>Invest in <em>Gold</em> – a timeless asset for financial growth.</SubServiceItem>
+                    <SubServiceItem>Navigate <em>Real Estate</em> opportunities with confidence.</SubServiceItem>
+                  </SubServiceList>
+                </ServiceItem>
+              </ServiceLink>
+              
+              <ServiceLink to="/banking">
+                <ServiceItem>
+                  <h3>Banking Made Easy:</h3>
+                  <p>Open or optimize your <em>Bank Accounts</em> with our expert assistance.</p>
+                </ServiceItem>
+              </ServiceLink>
+            </ServicesSection>
+
+            {/* Why Choose Us Section */}
+            <WhyChooseSection>
+              <ServiceTitle><span className="text-[#774800]">Why Choose Us? </span></ServiceTitle>
+              <p className="text-sm text-gray-600 mx-auto leading-relaxed">
+                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey. 
+                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential.
+              </p>
+              <p className="text-sm font-medium text-gray-700 mt-4">
+                <span className="text-[#774800]">Your financial success starts here. Let's shape your future – together. </span>
+              </p>
+              <ContactButton>GET CONTACT</ContactButton>
+            </WhyChooseSection>
           </div>
         </div>
+        
         {/* Partners Section */}
-        <PartnersContainer>
-          <div className="max-w-6xl mx-auto">
-            <ScrollingWrapper>
-              {/* Double the partners for seamless scrolling */}
-              {[...partners, ...partners].map((partner, index) => (
-                <PartnerImage
-                  key={index}
-                  src={partner.src}
-                  alt={partner.alt}
-                />
-              ))}
-            </ScrollingWrapper>
-          </div>
-        </PartnersContainer>
+        <PartnersSection>
+          <PartnersGrid>
+            {partners.map((partner, index) => (
+              <img
+                key={index}
+                src={partner.src}
+                alt={partner.alt}
+              />
+            ))}
+          </PartnersGrid>
+        </PartnersSection>
         {/* Team Section */}
         <TeamSection>
           <TeamHeader>
