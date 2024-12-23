@@ -1,33 +1,86 @@
 import { useState } from 'react';
-import Pension_Retirement from './../assets/Pension_Retirement.png';
+import Pension_Retirement from './../assets/PensionRetirement.png'; 
+import PensionCalculator from './PensionCalculator';
+import styled from 'styled-components';
+
+const CalculatorButton = styled.button`
+  background: #774800;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #8b5500;
+  }
+`;
 
 const PensionRetirement = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   return (
-    <div className="bg-[#fbfbfb94] min-h-screen flex items-center justify-center">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center p-6">
-        <div className="md:w-1/2">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Pension & Retirement
+    <div className="bg-white min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        {/* Header Section */}
+        <div className="mt-16">
+          <h1 className="text-6xl font-black mb-4">
+            <span className="text-black">Pension &</span>
+            <span className="text-gray-200 ml-2">Retirement</span>
           </h1>
-          <p className="text-gray-700 mb-6">
-            Planning for your retirement is one of the most important financial steps you can take to secure your future. At our financial coaching service, we specialize in creating customized pension and retirement strategies tailored to your unique lifestyle goals. Whether you’re just starting to save, are midway through your career, or nearing retirement, we offer expert advice to maximize your savings and investments.
-          </p>
-          <p className="text-gray-700 mb-6">
-            We analyze your current financial standing, future aspirations, and market trends to build a robust retirement plan. From pensions and annuities to long-term investment vehicles, we ensure your golden years are stress-free and financially secure. Don’t leave your future to chance—connect with us today for a personalized consultation.
-          </p>
-          <button className="bg-[#774800] text-white px-6 py-3 rounded-full font-medium hover:bg-[#f9a53a] transition-colors">
-            Learn More
-          </button>
         </div>
-        <div className="md:w-1/2 mt-6 md:mt-0">
-          <img 
-            src={Pension_Retirement}
-            alt="Pension and Retirement"
-            className="rounded-lg shadow-lg"
-          />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          {/* Left Column - Text Content */}
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-xl font-bold mb-3">Description</h2>
+              <p className="text-gray-600">
+              Pension and retirement services are financial programs designed to help individuals save and invest during their working years to ensure financial independence after retirement. These services typically include employer-sponsored retirement plans, individual retirement accounts (IRAs), annuities, and other savings vehicles. By contributing regularly, individuals build a retirement corpus that generates a steady income post-retirement. Pension plans are either defined-benefit, where the payout is predetermined, or defined-contribution, where the payout depends on the investment's performance.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold mb-3"></h2>
+              <p className="text-gray-600">
+              Saving for retirement offers peace of mind and a safety net for unforeseen expenses like medical bills or inflation. Additionally, many pension schemes provide tax benefits during the accumulation phase, further enhancing their appeal. Proper retirement planning ensures a comfortable lifestyle, even when regular income ceases.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold mb-3">Example</h2>
+              <p className="text-gray-600">
+              John, a 35-year-old software engineer, started contributing $300 monthly to his employer's 401(k) plan. With a company match of 50% and an average annual return of 6%, John accumulated over $500,000 by the time he turned 60, ensuring a comfortable retirement.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column - Image */}
+          <div className="relative">
+            <img 
+              src={Pension_Retirement}
+              alt="Team meeting at Salted Stone"
+              className="w-full rounded-lg shadow-lg"
+            />
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#c17f59] rounded-full z-10"></div>
+          </div>
+          <PensionCalculator />
         </div>
+
+        <div className="text-center mt-8">
+          <CalculatorButton onClick={() => setIsCalculatorOpen(true)}>
+            Open Pension Calculator
+          </CalculatorButton>
+        </div>
+
+        <PensionCalculator 
+          isOpen={isCalculatorOpen} 
+          onClose={() => setIsCalculatorOpen(false)} 
+        />
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import profile1 from '../assets/1.jpg';
 import profile2 from '../assets/2.jpg';
 import profile3 from '../assets/3.jpg';
 import profile4 from '../assets/4.jpg';
+import TeamMember from './TeamMember';
 
 
 const PartnersContainer = styled.div`
@@ -59,93 +60,6 @@ const PartnerImage = styled.img`
   }
 `;
 
-const MemberImage = styled.div`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  overflow: hidden;
-  background-color: #e5e5e5;
-  position: relative;
-  transition: all 0.3s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(119, 72, 0, 0.7);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    background-color: #774800;
-    border-radius: 50%;
-    transform: translate(20%, 20%);
-    z-index: 2;
-  }
-`;
-
-const ProfileDetails = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 20px);
-  background: rgba(255, 255, 255, 0.95);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: all 0.3s ease;
-  width: 200px;
-  z-index: 3;
-  
-  p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-    color: #333;
-  }
-`;
-
-const TeamMember = styled.div`
-  text-align: center;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-10px);
-    
-    ${MemberImage} {
-      &::before {
-        opacity: 1;
-      }
-    }
-    
-    ${ProfileDetails} {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-`;
-
 const TeamSection = styled.div`
   padding: 4rem 0;
   text-align: center;
@@ -179,19 +93,6 @@ const TeamGrid = styled.div`
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
-`;
-
-const MemberName = styled.h3`
-  font-weight: bold;
-  margin: 0.5rem 0;
-  font-size: 1.2rem;
-`;
-
-const MemberTitle = styled.p`
-  color: #774800;
-  font-size: 0.9rem;
-  margin: 0;
-  text-transform: uppercase;
 `;
 
 const Profile = () => {
@@ -295,18 +196,7 @@ const Profile = () => {
           </TeamHeader>
           <TeamGrid>
             {teamMembers.map((member, index) => (
-              <TeamMember key={index}>
-                <MemberImage>
-                  <img src={member.image} alt={member.name} />
-                </MemberImage>
-                <MemberName>{member.name}</MemberName>
-                <MemberTitle>{member.title}</MemberTitle>
-                <ProfileDetails>
-                  <p><strong>Email:</strong> {member.email}</p>
-                  <p><strong>Phone:</strong> {member.phone}</p>
-                  <p>{member.description}</p>
-                </ProfileDetails>
-              </TeamMember>
+              <TeamMember key={index} member={member} />
             ))}
           </TeamGrid>
         </TeamSection>

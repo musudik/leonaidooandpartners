@@ -130,7 +130,7 @@ const Navbar = () => {
         icon: 'CircleDollarSign',
         path: '/other-services',
         subItems: [
-          { name: 'Tax Services', icon: 'tax', path: '/tax' },
+          { name: 'Tax Services', icon: 'tax', path: '/tax-returns' },
           { name: 'Gold', icon: 'gold', path: '/gold' },
           { name: 'Electricity', icon: 'electricity', path: '/electricity' },
           { name: 'Bank Accounts', icon: 'bankAccounts', path: '/bank-accounts' },
