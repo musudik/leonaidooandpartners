@@ -1,29 +1,40 @@
-import { useState } from 'react';
-import Tax_Return from './../assets/Tax_Returns.png'; 
-import TaxReturnsCalculator from './TaxReturnsCalculator';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import TaxReturnsForm from './TaxReturnsForm';
+import TaxReturnsCalculator from './TaxReturnsCalculator';
+import Tax_Return from './../assets/Tax_Returns.png'; 
 
-const CalculatorButton = styled.button`
+const PageWrapper = styled.div`
+  padding: 2rem;
+`;
+
+const ContentWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Button = styled.button`
   background: #774800;
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
-  font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 2rem;
-  transition: background-color 0.2s ease;
-
+  font-size: 1rem;
+  
   &:hover {
     background: #8b5500;
   }
 `;
 
 const TaxReturns = () => {
-  const [isTaxReturnsOpen, setIsTaxReturnsOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   return (
-    <div className="bg-white min-h-screen">
+    <PageWrapper>
+      <ContentWrapper>
+      <div className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="mt-16">
@@ -69,19 +80,29 @@ const TaxReturns = () => {
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#c17f59] rounded-full z-10"></div>
           </div>
         </div>
+       
+        
+        <Button onClick={() => setIsFormOpen(true)}>
+          Start Tax Return
+        </Button>
+        
+        <Button onClick={() => setIsCalculatorOpen(true)}>
+          Calculate Tax Return
+        </Button>
 
-        <div className="text-center mt-8">
-          <CalculatorButton onClick={() => setIsTaxReturnsOpen(true)}>
-            Open Tax Returns Calculator
-          </CalculatorButton>
-        </div>
-
-        <TaxReturnsCalculator 
-          isOpen={isTaxReturnsOpen} 
-          onClose={() => setIsTaxReturnsOpen(false)} 
+        <TaxReturnsForm 
+          isOpen={isFormOpen}
+          onClose={() => setIsFormOpen(false)}
         />
-      </div>
-    </div>
+        
+        <TaxReturnsCalculator 
+          isOpen={isCalculatorOpen}
+          onClose={() => setIsCalculatorOpen(false)}
+        />
+        </div>
+        </div>
+      </ContentWrapper>
+    </PageWrapper>
   );
 };
 

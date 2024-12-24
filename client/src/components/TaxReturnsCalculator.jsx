@@ -1,7 +1,12 @@
 // Tax Returns Calculator React App
 import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 import { X } from 'lucide-react';
-import styled from 'styled-components';
+
+const overlayStyles = css`
+  visibility: ${({ $visible }) => $visible ? 'visible' : 'hidden'};
+  opacity: ${({ $visible }) => $visible ? 1 : 0};
+`;
 
 const CalculatorOverlay = styled.div`
   position: fixed;
@@ -14,9 +19,8 @@ const CalculatorOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  transition: all 0.3s ease-in-out;
+  transition: visibility 0.3s, opacity 0.3s;
+  ${overlayStyles}
 `;
 
 const CalculatorCard = styled.div`
@@ -26,9 +30,6 @@ const CalculatorCard = styled.div`
   width: 90%;
   max-width: 600px;
   position: relative;
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-20px)'};
-  transition: transform 0.3s ease-in-out;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   max-height: 90vh;
   overflow-y: auto;
 `;
@@ -42,32 +43,29 @@ const CloseButton = styled.button`
   cursor: pointer;
   color: #774800;
   padding: 0.5rem;
-  transition: transform 0.2s ease;
-
+  
   &:hover {
-    transform: rotate(90deg);
+    color: #8b5500;
   }
 `;
 
 const FormGroup = styled.div`
-  margin: 1.5rem 0;
+  margin-bottom: 1.5rem;
 `;
 
 const Label = styled.label`
   display: block;
   margin-bottom: 0.5rem;
   color: #555;
-  font-weight: 500;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
-
+  
   &:focus {
     outline: none;
     border-color: #774800;
@@ -77,11 +75,11 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
-
+  background: white;
+  
   &:focus {
     outline: none;
     border-color: #774800;
@@ -90,8 +88,7 @@ const Select = styled.select`
 
 const RadioGroup = styled.div`
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.5rem;
+  gap: 1rem;
 `;
 
 const RadioLabel = styled.label`
@@ -103,50 +100,40 @@ const RadioLabel = styled.label`
 
 const RadioInput = styled.input`
   cursor: pointer;
-  accent-color: #774800;
 `;
 
 const ButtonGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: flex-end;
   gap: 1rem;
   margin-top: 2rem;
 `;
 
 const Button = styled.button`
-  background: ${props => props.variant === 'outline' ? '#fff' : '#774800'};
-  color: ${props => props.variant === 'outline' ? '#774800' : '#fff'};
+  background: ${props => props.$variant === 'outline' ? 'white' : '#774800'};
+  color: ${props => props.$variant === 'outline' ? '#774800' : 'white'};
+  border: ${props => props.$variant === 'outline' ? '1px solid #774800' : 'none'};
   padding: 0.75rem 1.5rem;
-  border: ${props => props.variant === 'outline' ? '2px solid #774800' : 'none'};
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-
+  
   &:hover {
-    background: ${props => props.variant === 'outline' ? '#f9f5f0' : '#8b5500'};
+    background: ${props => props.$variant === 'outline' ? '#f5f5f5' : '#8b5500'};
   }
 `;
 
 const Result = styled.div`
   margin-top: 2rem;
-  padding: 1.5rem;
-  background: ${props => props.isVisible ? '#f9f5f0' : 'transparent'};
+  padding: 1rem;
+  background: #f5f5f5;
   border-radius: 8px;
-  text-align: center;
-  transform: ${props => props.isVisible ? 'translateY(0)' : 'translateY(10px)'};
-  opacity: ${props => props.isVisible ? 1 : 0};
-  transition: all 0.3s ease-in-out;
-
+  transition: visibility 0.3s, opacity 0.3s;
+  ${overlayStyles}
+  
   h2 {
     color: #774800;
     margin-bottom: 0.5rem;
-  }
-
-  p {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
   }
 `;
 
@@ -215,8 +202,8 @@ const TaxReturnsCalculator = ({ isOpen, onClose }) => {
     };
 
     return (
-        <CalculatorOverlay isOpen={isOpen} onClick={handleClose}>
-            <CalculatorCard isOpen={isOpen} onClick={e => e.stopPropagation()}>
+        <CalculatorOverlay $visible={isOpen} onClick={onClose}>
+            <CalculatorCard onClick={e => e.stopPropagation()}>
                 <CloseButton onClick={handleClose}>
                     <X size={24} />
                 </CloseButton>
@@ -369,7 +356,7 @@ const TaxReturnsCalculator = ({ isOpen, onClose }) => {
                 </FormGroup>
 
                 <ButtonGroup>
-                    <Button variant="outline" onClick={clearForm}>
+                    <Button $variant="outline" onClick={clearForm}>
                         Clear Form
                     </Button>
                     <Button onClick={calculateRefund}>
@@ -377,7 +364,7 @@ const TaxReturnsCalculator = ({ isOpen, onClose }) => {
                     </Button>
                 </ButtonGroup>
 
-                <Result isVisible={refund !== null}>
+                <Result $visible={refund !== null}>
                     <h2>Estimated Tax Refund</h2>
                     <p>{refund >= 0 ? `Refund: €${refund}` : `Amount Owed: €${Math.abs(refund)}`}</p>
                 </Result>
