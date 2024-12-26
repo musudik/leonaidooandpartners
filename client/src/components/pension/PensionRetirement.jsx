@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Pension_Retirement from './../assets/PensionRetirement.png'; 
+import Pension_Retirement from '../../assets/PensionRetirement.png'; 
 import PensionCalculator from './PensionCalculator';
 import styled from 'styled-components';
 
@@ -28,8 +28,8 @@ const PensionRetirement = () => {
         {/* Header Section */}
         <div className="mt-16">
           <h1 className="text-6xl font-black mb-4">
-            <span className="text-black">Pension &</span>
-            <span className="text-gray-200 ml-2">Retirement</span>
+            <span className="text-[#774800]">Pension</span>
+            <span className="text-[#74767a] ml-2"> & Retirement</span>
           </h1>
         </div>
 

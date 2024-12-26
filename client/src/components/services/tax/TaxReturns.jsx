@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import TaxReturnsForm from './TaxReturnsForm';
 import TaxReturnsCalculator from './TaxReturnsCalculator';
-import Tax_Return from './../assets/Tax_Returns.png'; 
+import Tax_Return from '../../../assets/Tax_Returns.png'; 
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -31,6 +31,14 @@ const TaxReturns = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+  };
+
   return (
     <PageWrapper>
       <ContentWrapper>
@@ -39,8 +47,8 @@ const TaxReturns = () => {
         {/* Header Section */}
         <div className="mt-16">
           <h1 className="text-6xl font-black mb-4">
-            <span className="text-black">Tax </span>
-            <span className="text-gray-200 ml-2">Returns</span>
+            <span className="text-[#774800]">Tax </span>
+            <span className="text-[#74767a] ml-2">Returns</span>
           </h1>
         </div>
 
@@ -81,19 +89,22 @@ const TaxReturns = () => {
           </div>
         </div>
        
-        
-        <Button onClick={() => setIsFormOpen(true)}>
-          Start Tax Return
-        </Button>
-        
         <Button onClick={() => setIsCalculatorOpen(true)}>
-          Calculate Tax Return
+          Estimate Tax Returns
         </Button>
+        <br/><br/>
+        <Button onClick={handleOpenForm}>
+          File Tax Returns
+        </Button>
+        
+        
 
-        <TaxReturnsForm 
-          isOpen={isFormOpen}
-          onClose={() => setIsFormOpen(false)}
-        />
+        {isFormOpen && (
+          <TaxReturnsForm 
+            isOpen={isFormOpen}
+            onClose={handleCloseForm}
+          />
+        )}
         
         <TaxReturnsCalculator 
           isOpen={isCalculatorOpen}

@@ -1,5 +1,4 @@
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
-import servicesImg from '../assets/Services-c2.png'; // Add your profile image
 import Badenia from '../assets/partners/Badenia.png';
 import DeutscheBank from '../assets/partners/DeutscheBank.jpeg';
 import DVAG from '../assets/partners/DVAG.png';
@@ -53,6 +52,7 @@ const TeamGrid = styled.div`
 const ServicesSection = styled.section`
   max-width: 900px;
   margin: 0 auto;
+  padding: 0.5rem;
 `;
 
 const ServiceTitle = styled.h2`
@@ -65,7 +65,7 @@ const ServiceTitle = styled.h2`
 const ServiceLink = styled(Link)`
   text-decoration: none;
   display: block;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 8px;
   transition: all 0.3s ease;
   
@@ -81,8 +81,6 @@ const ServiceLink = styled(Link)`
 `;
 
 const ServiceItem = styled.div`
-  margin-bottom: 1.2rem;
-  
   h3 {
     color: #774800;
     font-size: 1.1rem;
@@ -234,7 +232,7 @@ const Profile = () => {
             <div className="mt-16">
               <h3 className="text-6xl font-black mb-2">
                 <span className="text-[#774800]">Leo Naidoo </span>
-                <span className="text-gray-200 ml-2">& Partners</span>
+                <span className="text-[#74767a] ml-2">& Partners</span>
               </h3>
             </div>
             <p className="text-gray-600 mb-2">
@@ -247,13 +245,12 @@ const Profile = () => {
 
             {/* What We Offer Section */}
             <ServicesSection>
-              <ServiceTitle>What We Offer</ServiceTitle>
-              
+            <ServiceTitle><span className="text-[#774800]">What We Offer</span></ServiceTitle>
               <ServiceLink to="/pension-retirement">
                 <ServiceItem>
                   <h3>Pension & Retirement Planning:</h3>
                   <SubServiceList>
-                    <SubServiceItem>Secure your golden years with tailored plans that prioritize your dreams and peace of mind.</SubServiceItem>
+                    <SubServiceItem>Secure your golden years with tailored plans that prioritize your dreams and peace of mind</SubServiceItem>
                   </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
@@ -262,7 +259,7 @@ const Profile = () => {
                 <ServiceItem>
                   <h3>Tax Services:</h3>
                   <SubServiceList>
-                    <SubServiceItem>Simplify tax season with strategies that maximize your benefits while ensuring compliance.</SubServiceItem>
+                    <SubServiceItem>Simplify tax season with strategies that maximize your benefits while ensuring compliance</SubServiceItem>
                   </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
@@ -271,10 +268,10 @@ const Profile = () => {
                 <ServiceItem>
                   <h3>Loans Made Simple:</h3>
                   <SubServiceList>
-                    <SubServiceItem><strong>Personal Loans</strong> for life's moments that matter.</SubServiceItem>
-                    <SubServiceItem><strong>Home/Real Estate Loans</strong> to turn your dream home into reality.</SubServiceItem>
-                    <SubServiceItem><strong>Business Loans</strong> to fuel your entrepreneurial ambitions.</SubServiceItem>
-                    <SubServiceItem><strong>Student Loans</strong> to invest in a brighter future.</SubServiceItem>
+                    <SubServiceItem><strong>Personal Loans</strong> for life's moments that matter</SubServiceItem>
+                    <SubServiceItem><strong>Home/Real Estate Loans</strong> to turn your dream home into reality</SubServiceItem>
+                    <SubServiceItem><strong>Business Loans</strong> to fuel your entrepreneurial ambitions</SubServiceItem>
+                    <SubServiceItem><strong>Student Loans</strong> to invest in a brighter future</SubServiceItem>
                   </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
@@ -283,7 +280,7 @@ const Profile = () => {
                 <ServiceItem>
                   <h3>Insurance Solutions:</h3>
                   <SubServiceList>
-                    <SubServiceItem>Protect your health, assets, and peace of mind with comprehensive <em>Health, Car, Liability,</em> and <em>Disability Insurance</em>.</SubServiceItem>
+                    <SubServiceItem>Protect your health, assets, and peace of mind with comprehensive <em>Health, Car, Liability,</em> and <em>Disability Insurance</em></SubServiceItem>
                   </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
@@ -291,7 +288,9 @@ const Profile = () => {
               <ServiceLink to="/energy-savings">
                 <ServiceItem>
                   <h3>Energy Savings:</h3>
-                  <p>Slash your electricity bills with customized energy reduction strategies.</p>
+                  <SubServiceList>
+                    <SubServiceItem>Slash your electricity bills with customized energy reduction strategies</SubServiceItem>
+                  </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
               
@@ -299,8 +298,8 @@ const Profile = () => {
                 <ServiceItem>
                   <h3>Wealth Building:</h3>
                   <SubServiceList>
-                    <SubServiceItem>Invest in <em>Gold</em> – a timeless asset for financial growth.</SubServiceItem>
-                    <SubServiceItem>Navigate <em>Real Estate</em> opportunities with confidence.</SubServiceItem>
+                    <SubServiceItem>Invest in <em>Gold</em> – a timeless asset for financial growth</SubServiceItem>
+                    <SubServiceItem>Navigate <em>Real Estate</em> opportunities with confidence</SubServiceItem>
                   </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
@@ -308,17 +307,19 @@ const Profile = () => {
               <ServiceLink to="/banking">
                 <ServiceItem>
                   <h3>Banking Made Easy:</h3>
-                  <p>Open or optimize your <em>Bank Accounts</em> with our expert assistance.</p>
+                  <SubServiceList>
+                    <SubServiceItem>Open or optimize your <em>Bank Accounts</em> with our expert assistance</SubServiceItem>
+                  </SubServiceList>
                 </ServiceItem>
               </ServiceLink>
             </ServicesSection>
 
             {/* Why Choose Us Section */}
             <WhyChooseSection>
-              <ServiceTitle>Why Choose Us?</ServiceTitle>
-              <p className="text-sm text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey. 
-                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential.
+              <ServiceTitle><span className="text-[#774800]">Why Choose Us?</span></ServiceTitle>
+              <p className="text-sm text-gray-600 mx-auto leading-relaxed">
+                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey
+                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential
               </p>
               <p className="text-sm font-medium text-gray-700 mt-4">
                 Your financial success starts here. Let's shape your future – together.

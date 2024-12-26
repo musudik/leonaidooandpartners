@@ -93,21 +93,19 @@ const Navbar = () => {
     {
         name: 'Insurance',
         icon: 'insurance',
-        path: '/insurance',
         subItems: [
-          { name: 'Health Insurance', icon: 'health', path: '/insurance/health' },
           { name: 'Car Insurance', icon: 'car', path: '/insurance/car' },
-          { name: 'Liability Insurance', icon: 'liability', path: '/insurance/liability' },
           { name: 'Disability Insurance', icon: 'disability', path: '/insurance/disability' },
+          { name: 'Health Insurance', icon: 'health', path: '/insurance/health' },
+          { name: 'Liability Insurance', icon: 'liability', path: '/insurance/liability' },
         ],
     },
     {
       name: 'Loans',
       icon: 'loans',
-      path: '/loans',
       subItems: [
-        { name: 'Personal Loans', icon: 'personal', path: '/loans/personal' },
         { name: 'Business Loans', icon: 'briefcase', path: '/loans/business' },
+        { name: 'Personal Loans', icon: 'personal', path: '/loans/personal' },
         { name: 'Student Loans', icon: 'student', path: '/loans/student' },
       ],
     },
@@ -119,22 +117,20 @@ const Navbar = () => {
     {
         name: 'Real Estate',
         icon: 'realEstate',
-        path: '/real-estate',
         subItems: [
-            { name: 'Properties', icon: 'personal', path: '/loans/personal' },
-            { name: 'Real Estate Finance', icon: 'realEstate', path: '/loans/home' },
+            { name: 'Properties', icon: 'realEstate', path: '/realEstate/properties' },
+            { name: 'Real Estate Finance', icon: 'realEstate', path: '/realEstate/finance' },
           ],
     },
     {
         name: 'Other Services',
         icon: 'CircleDollarSign',
-        path: '/other-services',
         subItems: [
-          { name: 'Tax Services', icon: 'tax', path: '/tax-returns' },
-          { name: 'Gold', icon: 'gold', path: '/gold' },
-          { name: 'Electricity', icon: 'electricity', path: '/electricity' },
           { name: 'Bank Accounts', icon: 'bankAccounts', path: '/bank-accounts' },
-          { name: 'Sponsored Events', icon: 'gift', path: '/bank-accounts' },
+          { name: 'Electricity', icon: 'electricity', path: '/electricity' },
+          { name: 'Gold', icon: 'gold', path: '/gold' },
+          { name: 'Sponsored Events', icon: 'gift', path: '/sponsored-events' },
+          { name: 'Tax Services', icon: 'tax', path: '/tax-returns' },
         ],
     },
     {

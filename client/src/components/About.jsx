@@ -4,6 +4,13 @@ const About = () => {
 return (
     <div className="page-container bg-white min-h-screen">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12">
+        {/* Header Section */}
+        <div className="mt-16">
+          <h1 className="text-6xl font-black mb-4">
+            <span className="text-[#774800]">About</span>
+            <span className="text-[#74767a] ml-2">Us</span>
+          </h1>
+        </div>
         {/* Map Section */}
         <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">On a Map</h2>

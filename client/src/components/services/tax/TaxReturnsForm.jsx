@@ -2,9 +2,64 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { X } from 'lucide-react';
 import axios from 'axios';
+import { db, storage } from "../../firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Grid } from '@mui/material';
+import { translations } from '../../translations';
+import logo from '../../../assets/LEONAIDOO.png';
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+// Add these styled components
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 32px;
+`;
+
+const LogoSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const Logo = styled.img`
+  height: 40px;
+  width: auto;
+`;
+
+const Title = styled.h1`
+  color: #774800;
+  font-size: 24px;
+  margin: 0;
+`;
+
+const LanguageButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  
+  &:hover {
+    border-color: #774800;
+    color: #774800;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
 
 const Modal = styled.div`
   position: fixed;
@@ -236,6 +291,23 @@ const UploadButton = styled.button`
   }
 `;
 
+const LanguageSelect = styled.select`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+
+  &:focus {
+    outline: none;
+    border-color: #774800;
+  }
+`;
+
 const TaxReturnsCalculator = ({ isOpen, onClose }) => {
     return (
       <CalculatorWrapper display={isOpen}>
@@ -246,6 +318,8 @@ const TaxReturnsCalculator = ({ isOpen, onClose }) => {
 
 const TaxReturnsForm = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [language, setLanguage] = useState('en');
+  const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     personalInfo: {},
     taxClass: {},
@@ -253,33 +327,152 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
     deductions: {}
   });
 
-  const steps = [
-    "Personal Information",
-    "Tax Class and Income",
-    "Insurance Contributions",
-    "Deductions and Money Sent",
-    "Additional Forms & Review"
-  ];
+  const t = (key) => {
+    const keys = key.split('.');
+    return keys.reduce((obj, k) => obj?.[k], translations[language]) || key;
+  };
+
+  const validateForm = (step) => {
+    const errors = {};
+    
+    switch(step) {
+      case 1:
+        if (!formData.personalInfo.firstName) {
+          errors.firstName = t('validation.required');
+        }
+        if (!formData.personalInfo.lastName) {
+          errors.lastName = t('validation.required');
+        }
+        if (!formData.personalInfo.taxId) {
+          errors.taxId = t('validation.required');
+        } else if (!/^\d{11}$/.test(formData.personalInfo.taxId)) {
+          errors.taxId = t('validation.invalidTaxId');
+        }
+        break;
+      
+      case 2:
+        if (!formData.taxClass.class) {
+          errors.taxClass = t('validation.required');
+        }
+        if (!formData.taxClass.annualIncome) {
+          errors.annualIncome = t('validation.required');
+        }
+        break;
+      
+      case 3:
+        if (!formData.insurance.health) {
+          errors.healthInsurance = t('validation.required');
+        }
+        if (!formData.insurance.pension) {
+          errors.pensionInsurance = t('validation.required');
+        }
+        break;
+      
+      default:
+        break;
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleNext = () => {
-    if (currentStep < steps.length) {
+    if (validateForm(currentStep)) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handlePrevious = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    setCurrentStep(currentStep - 1);
   };
+
+  const [uploading, setUploading] = useState(false);
+
+  const tax = key => {
+    const keys = key.split('.');
+    return keys.reduce((obj, k) => obj?.[k], translations[language]) || key;
+  };
+
+  const maritalStatusOptions = {
+    en: [
+      { value: 'single', label: 'Single' },
+      { value: 'married', label: 'Married' },
+      { value: 'divorced', label: 'Divorced' },
+      { value: 'widowed', label: 'Widowed' }
+    ],
+    de: [
+      { value: 'single', label: 'Ledig' },
+      { value: 'married', label: 'Verheiratet' },
+      { value: 'divorced', label: 'Geschieden' },
+      { value: 'widowed', label: 'Verwitwet' }
+    ]
+  };
+
+  const handleFileUpload = async (file, path) => {
+    if (!file) return null;
+    const storageRef = ref(storage, `${path}/${file.name}`);
+    await uploadBytes(storageRef, file);
+    return getDownloadURL(storageRef);
+  };
+
+//   const handleSubmit = async () => {
+//     try {
+//       const response = await axios.post(`${API_URL}/api/tax-returns`, formData);
+//       console.log('Form submitted:', response.data);
+//       onClose();
+//     } catch (error) {
+//       console.error('Error submitting form:', error);
+//     }
+//   };
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`${API_URL}/api/tax-returns`, formData);
-      console.log('Form submitted:', response.data);
+      setUploading(true);
+      
+      // Upload files first
+      const fileUploads = await Promise.all([
+        formData.personalInfo.identityDocument && 
+          handleFileUpload(formData.personalInfo.identityDocument, 'identity'),
+        formData.taxClass.incomeStatement && 
+          handleFileUpload(formData.taxClass.incomeStatement, 'income'),
+        formData.insurance.certificates && 
+          handleFileUpload(formData.insurance.certificates, 'insurance'),
+        formData.deductions.receipts && 
+          handleFileUpload(formData.deductions.receipts, 'deductions')
+      ]);
+
+      // Prepare data for Firestore
+      const submissionData = {
+        ...formData,
+        personalInfo: {
+          ...formData.personalInfo,
+          identityDocumentUrl: fileUploads[0]
+        },
+        taxClass: {
+          ...formData.taxClass,
+          incomeStatementUrl: fileUploads[1]
+        },
+        insurance: {
+          ...formData.insurance,
+          certificatesUrl: fileUploads[2]
+        },
+        deductions: {
+          ...formData.deductions,
+          receiptsUrl: fileUploads[3]
+        },
+        submittedAt: new Date(),
+        language
+      };
+
+      // Submit to Firestore
+      await addDoc(collection(db, 'taxReturns'), submissionData);
+      setUploading(false);
       onClose();
+      alert(t('messages.submitSuccess'));
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Submission error:', error);
+      setUploading(false);
+      alert(t('messages.submitError'));
     }
   };
 
@@ -291,65 +484,61 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>First Name *</Label>
+                  <Label>{t('fields.firstName')} *</Label>
                   <Input
                     type="text"
-                    placeholder="First Name"
-                    required
+                    value={formData.personalInfo.firstName || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, firstName: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.firstName && <ErrorText>{formErrors.firstName}</ErrorText>}
                 </FormField>
               </Grid>
               
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Last Name *</Label>
+                  <Label>{t('fields.lastName')} *</Label>
                   <Input
                     type="text"
-                    placeholder="Last Name"
-                    required
+                    value={formData.personalInfo.lastName || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, lastName: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.lastName && <ErrorText>{formErrors.lastName}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Date of Birth *</Label>
+                  <Label>{t('fields.dateOfBirth')} *</Label>
                   <Input
                     type="date"
-                    placeholder="mm/dd/yyyy"
-                    required
+                    value={formData.personalInfo.dateOfBirth || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, dateOfBirth: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.dateOfBirth && <ErrorText>{formErrors.dateOfBirth}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Tax ID *</Label>
+                  <Label>{t('fields.taxId')} *</Label>
                   <Input
                     type="text"
-                    placeholder="Tax ID"
-                    required
+                    value={formData.personalInfo.taxId || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, taxId: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.taxId && <ErrorText>{formErrors.taxId}</ErrorText>}
                 </FormField>
               </Grid>
 
@@ -359,71 +548,67 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
 
               <Grid item xs={12}>
                 <FormField>
-                  <Label>Street *</Label>
+                  <Label>{t('fields.street')} *</Label>
                   <Input
                     type="text"
-                    placeholder="Street"
-                    required
+                    value={formData.personalInfo.street || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, street: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.street && <ErrorText>{formErrors.street}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={4}>
                 <FormField>
-                  <Label>House Number *</Label>
+                  <Label>{t('fields.houseNumber')} *</Label>
                   <Input
                     type="text"
-                    placeholder="House Number"
-                    required
+                    value={formData.personalInfo.houseNumber || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, houseNumber: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.houseNumber && <ErrorText>{formErrors.houseNumber}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={4}>
                 <FormField>
-                  <Label>Postal Code *</Label>
+                  <Label>{t('fields.postalCode')} *</Label>
                   <Input
                     type="text"
-                    placeholder="Postal Code"
-                    required
+                    value={formData.personalInfo.postalCode || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, postalCode: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.postalCode && <ErrorText>{formErrors.postalCode}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={4}>
                 <FormField>
-                  <Label>City (Stadt) *</Label>
+                  <Label>{t('fields.city')} *</Label>
                   <Input
                     type="text"
-                    placeholder="City"
-                    required
+                    value={formData.personalInfo.city || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       personalInfo: { ...formData.personalInfo, city: e.target.value }
                     })}
                   />
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.city && <ErrorText>{formErrors.city}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12}>
                 <FormGroup>
-                  <Label>State (Bundesland)</Label>
+                  <Label>{t('fields.state')} *</Label>
                   <Select
                     value={formData.personalInfo?.state || ''}
                     onChange={(e) => setFormData({
@@ -449,12 +634,13 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
                     <Option value="schleswig-holstein">Schleswig-Holstein</Option>
                     <Option value="thuringia">Thuringia (Thüringen)</Option>
                   </Select>
+                  {formErrors.state && <ErrorText>{formErrors.state}</ErrorText>}
                 </FormGroup>
               </Grid>
 
               <Grid item xs={12}>
                 <FormField>
-                  <Label>Marital Status</Label>
+                  <Label>{t('fields.maritalStatus')} *</Label>
                   <Select
                     value={formData.personalInfo?.maritalStatus || ''}
                     onChange={(e) => setFormData({
@@ -468,7 +654,7 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
                     <option value="divorced">Divorced</option>
                     <option value="widowed">Widowed</option>
                   </Select>
-                  <ErrorText>Dieses Feld ist erforderlich</ErrorText>
+                  {formErrors.maritalStatus && <ErrorText>{formErrors.maritalStatus}</ErrorText>}
                 </FormField>
               </Grid>
 
@@ -503,7 +689,7 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <FormGroup>
-                  <Label>Tax Class</Label>
+                  <Label>{t('fields.taxClass')} *</Label>
                   <Select
                     value={formData.taxClass?.class || ''}
                     onChange={(e) => setFormData({
@@ -519,21 +705,22 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
                     <Option value="5">Tax Class 5</Option>
                     <Option value="6">Tax Class 6</Option>
                   </Select>
+                  {formErrors.taxClass && <ErrorText>{formErrors.taxClass}</ErrorText>}
                 </FormGroup>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Annual Income</Label>
+                  <Label>{t('fields.annualIncome')} *</Label>
                   <Input
                     type="number"
-                    placeholder="Annual Income"
                     value={formData.taxClass?.annualIncome || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       taxClass: { ...formData.taxClass, annualIncome: e.target.value }
                     })}
                   />
+                  {formErrors.annualIncome && <ErrorText>{formErrors.annualIncome}</ErrorText>}
                 </FormField>
               </Grid>
 
@@ -568,35 +755,35 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Health Insurance</Label>
+                  <Label>{t('fields.healthInsurance')} *</Label>
                   <Input
                     type="number"
                     step="0.01"
                     min="0"
-                    placeholder="Health Insurance Amount"
                     value={formData.insurance?.health || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       insurance: { ...formData.insurance, health: e.target.value }
                     })}
                   />
+                  {formErrors.healthInsurance && <ErrorText>{formErrors.healthInsurance}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Pension Insurance</Label>
+                  <Label>{t('fields.pensionInsurance')} *</Label>
                   <Input
                     type="number"
                     step="0.01"
                     min="0"
-                    placeholder="Pension Insurance Amount"
                     value={formData.insurance?.pension || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       insurance: { ...formData.insurance, pension: e.target.value }
                     })}
                   />
+                  {formErrors.pensionInsurance && <ErrorText>{formErrors.pensionInsurance}</ErrorText>}
                 </FormField>
               </Grid>
 
@@ -632,35 +819,35 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Charitable Donations</Label>
+                  <Label>{t('fields.donations')} *</Label>
                   <Input
                     type="number"
                     step="0.01"
                     min="0"
-                    placeholder="Donation Amount"
                     value={formData.deductions?.donations || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       deductions: { ...formData.deductions, donations: e.target.value }
                     })}
                   />
+                  {formErrors.donations && <ErrorText>{formErrors.donations}</ErrorText>}
                 </FormField>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormField>
-                  <Label>Work-Related Expenses</Label>
+                  <Label>{t('fields.workExpenses')} *</Label>
                   <Input
                     type="number"
                     step="0.01"
                     min="0"
-                    placeholder="Work Expenses Amount"
                     value={formData.deductions?.workExpenses || ''}
                     onChange={(e) => setFormData({
                       ...formData,
                       deductions: { ...formData.deductions, workExpenses: e.target.value }
                     })}
                   />
+                  {formErrors.workExpenses && <ErrorText>{formErrors.workExpenses}</ErrorText>}
                 </FormField>
               </Grid>
 
@@ -710,11 +897,13 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
       case 5:
         return (
           <FormSection>
-            <h2>Final Review</h2>
+            <h2>{t('steps.review')}</h2>
             
             <ReviewSection>
-              <ReviewTitle>Personal Information</ReviewTitle>
-              <ReviewItem>{formData.personalInfo.firstName} {formData.personalInfo.lastName}</ReviewItem>
+              <ReviewTitle>{t('steps.personal')}</ReviewTitle>
+              <ReviewItem>
+                {formData.personalInfo.firstName} {formData.personalInfo.lastName}
+              </ReviewItem>
               <ReviewItem>
                 {formData.personalInfo.street} {formData.personalInfo.houseNumber}, 
                 {formData.personalInfo.postalCode} {formData.personalInfo.city}
@@ -751,7 +940,7 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
 
   const renderSteps = () => (
     <StepIndicator>
-      {steps.map((step, index) => (
+      {['Personal Information', 'Tax Class and Income', 'Insurance Contributions', 'Deductions and Money Sent', 'Additional Forms & Review'].map((step, index) => (
         <StepItem 
           key={index}
           $active={currentStep === index + 1}
@@ -776,12 +965,41 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
   return (
     <Modal show={isOpen}>
       <FormCard show={isOpen}>
+        <Header>
+            <LogoSection>
+            <Logo src={logo} alt="Leo Naidoo & Partners" />
+            <Title>German Tax Return Form</Title>
+            </LogoSection>
+            
+            <LanguageSelect
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                >
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+            </LanguageSelect>
+
+            {/* <LanguageButton onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm-2.29-2.333A17.9 17.9 0 0 1 8.027 13H4.062a8.008 8.008 0 0 0 5.648 6.667zM3.616 11h3.905a19.65 19.65 0 0 1-.184-2H3.064a7.96 7.96 0 0 0 0 2h.552zm.446-4h3.965c.156-1.428.596-2.768 1.274-4H4.062A8.008 8.008 0 0 0 4.062 7zm9.583 13a9.955 9.955 0 0 1-1.842-3H9.721a15.908 15.908 0 0 0 1.528 2.666A7.98 7.98 0 0 0 13.645 20zm1.842-5h2.082c.156-1.428.596-2.768 1.274-4h-3.965a8.008 8.008 0 0 0-.61 4zm-2.082-6h-2.082a19.65 19.65 0 0 1 .184-2h3.905a7.96 7.96 0 0 0 0 2h-.552z"/>
+            </svg>
+            {language === 'en' ? 'English' : 'Deutsch'}
+            </LanguageButton> */}
+        </Header>
         <X 
           style={{ position: 'absolute', right: '1rem', top: '1rem', cursor: 'pointer' }}
           onClick={onClose}
         />
         
-        <h2>Tax Returns Form</h2>
+        {/* <LanguageSelect
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+        </LanguageSelect> */}
+
+        <h2>{t('steps.personal')}</h2>
         
         {renderSteps()}
 
@@ -790,16 +1008,16 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
         <ButtonGroup>
           {currentStep > 1 && (
             <Button secondary onClick={handlePrevious}>
-              Previous
+              {t('buttons.back')}
             </Button>
           )}
-          {currentStep < steps.length ? (
+          {currentStep < 5 ? (
             <Button onClick={handleNext}>
-              Next
+              {t('buttons.next')}
             </Button>
           ) : (
             <Button onClick={handleSubmit}>
-              Submit
+              {t('buttons.submit')}
             </Button>
           )}
         </ButtonGroup>
