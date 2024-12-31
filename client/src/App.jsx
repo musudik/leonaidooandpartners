@@ -22,6 +22,7 @@ import Gold from './components/services/Gold';
 import Electricity from './components/services/Electricity';
 import BankAccounts from './components/services/BankAccounts';
 import SponsoredEvents from './components/services/SponsoredEvents';
+import FloatingChat from './components/chat/FloatingChat';
 
 function App() {
   return (
@@ -56,11 +57,11 @@ function App() {
               <Route path="/electricity" element={<Electricity />} />
               <Route path="/bank-accounts" element={<BankAccounts />} />
               <Route path="/sponsored-events" element={<SponsoredEvents />} />
-              
               {/* About */}
               <Route path="/about" element={<About />} />
             </Routes>
           </main>
+          <FloatingChat />
           <Footer />
       </div>
     </Router>

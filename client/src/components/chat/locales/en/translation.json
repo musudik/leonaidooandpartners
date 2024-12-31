@@ -1,0 +1,8 @@
+{
+    "greeting": "Hello! How can I help you?",
+    "sending": "Sending...",
+    "error": "An error occurred. Please try again.",
+    "placeholder": "Type your message...",
+    "themeLight": "🌙",
+    "themeDark": "☀️"
+  }
