@@ -4,7 +4,7 @@ import DeutscheBank from '../assets/partners/DeutscheBank.jpeg';
 import DVAG from '../assets/partners/DVAG.png';
 import Geiger from '../assets/partners/Geiger.png';
 import prohyp from '../assets/partners/prohyp.png';
-import Carousel from './Carousel'; // Import the CarouselPage component
+import Carousel from './Carousel';
 import styled from 'styled-components';
 import profile1 from '../assets/1.jpg';
 import profile2 from '../assets/2.jpg';
@@ -13,7 +13,9 @@ import profile4 from '../assets/4.jpg';
 import TeamMember from './TeamMember';
 import { Link } from 'react-router-dom';
 import ContactForm from './ContactForm';
+import ServiceSection from './ServiceSection';
 import { useState } from 'react';
+import ScheduleModal from './ScheduleModal';
 
 const TeamSection = styled.div`
   padding: 4rem 0;
@@ -167,8 +169,32 @@ const PartnersGrid = styled.div`
   }
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
+const Button = styled.button`
+  background: #774800;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #8b5500;
+    transform: translateY(-2px);
+  }
+`;
+
 const Profile = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
 
   const partners = [
     { src: Badenia, alt: "Badenia" },
@@ -219,7 +245,7 @@ const Profile = () => {
       phone: "+1 234 567 894",
       description: "Passionate about spreading financial literacy and client education."
     }
-  ];
+  ];  
 
   return (
     <div className="page-container bg-white min-h-screen">
@@ -243,90 +269,27 @@ const Profile = () => {
                 or exploring loans, our expert team is here to guide you every step of the way.</p>
             </p>
 
-            {/* What We Offer Section */}
-            <ServicesSection>
-            <ServiceTitle><span className="text-[#774800]">What We Offer</span></ServiceTitle>
-              <ServiceLink to="/pension-retirement">
-                <ServiceItem>
-                  <h3>Pension & Retirement Planning:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Secure your golden years with tailored plans that prioritize your dreams and peace of mind</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/tax-returns">
-                <ServiceItem>
-                  <h3>Tax Services:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Simplify tax season with strategies that maximize your benefits while ensuring compliance</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/loans">
-                <ServiceItem>
-                  <h3>Loans Made Simple:</h3>
-                  <SubServiceList>
-                    <SubServiceItem><strong>Personal Loans</strong> for life's moments that matter</SubServiceItem>
-                    <SubServiceItem><strong>Home/Real Estate Loans</strong> to turn your dream home into reality</SubServiceItem>
-                    <SubServiceItem><strong>Business Loans</strong> to fuel your entrepreneurial ambitions</SubServiceItem>
-                    <SubServiceItem><strong>Student Loans</strong> to invest in a brighter future</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/insurance">
-                <ServiceItem>
-                  <h3>Insurance Solutions:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Protect your health, assets, and peace of mind with comprehensive <em>Health, Car, Liability,</em> and <em>Disability Insurance</em></SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/energy-savings">
-                <ServiceItem>
-                  <h3>Energy Savings:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Slash your electricity bills with customized energy reduction strategies</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/wealth-building">
-                <ServiceItem>
-                  <h3>Wealth Building:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Invest in <em>Gold</em> – a timeless asset for financial growth</SubServiceItem>
-                    <SubServiceItem>Navigate <em>Real Estate</em> opportunities with confidence</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-              
-              <ServiceLink to="/banking">
-                <ServiceItem>
-                  <h3>Banking Made Easy:</h3>
-                  <SubServiceList>
-                    <SubServiceItem>Open or optimize your <em>Bank Accounts</em> with our expert assistance</SubServiceItem>
-                  </SubServiceList>
-                </ServiceItem>
-              </ServiceLink>
-            </ServicesSection>
+            {/* Replace the old Services section with the new ServiceSection component */}
+            <ServiceSection />
 
             {/* Why Choose Us Section */}
             <WhyChooseSection>
               <ServiceTitle><span className="text-[#774800]">Why Choose Us?</span></ServiceTitle>
               <p className="text-sm text-gray-600 mx-auto leading-relaxed">
-                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey
-                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential
+                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey.
+                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential.
               </p>
               <p className="text-sm font-medium text-gray-700 mt-4">
                 Your financial success starts here. Let's shape your future – together.
               </p>
-              <ContactButton onClick={() => setIsContactFormOpen(true)}>
-                GET CONTACT
-              </ContactButton>
+              <ActionButtons>
+                <Button onClick={() => setIsContactFormOpen(true)}>
+                  GET CONTACT
+                </Button>
+                <Button onClick={() => setIsScheduleModalOpen(true)}>
+                  SCHEDULE CONSULTATION
+                </Button>
+              </ActionButtons>
             </WhyChooseSection>
           </div>
         </div>
@@ -343,6 +306,7 @@ const Profile = () => {
             ))}
           </PartnersGrid>
         </PartnersSection>
+
         {/* Team Section */}
         <TeamSection>
           <TeamHeader>
@@ -359,6 +323,11 @@ const Profile = () => {
       <ContactForm 
         isOpen={isContactFormOpen} 
         onClose={() => setIsContactFormOpen(false)} 
+      />
+      
+      <ScheduleModal 
+        isOpen={isScheduleModalOpen} 
+        onClose={() => setIsScheduleModalOpen(false)} 
       />
     </div>
   );

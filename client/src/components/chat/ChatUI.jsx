@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import "./ChatUI.css";
 import "./i18next";
 
-const BASE_URL = "http://localhost:3002";
+// const BASE_URL = "http://localhost:3002";
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ChatUI = () => {
   const { t, i18n } = useTranslation();
