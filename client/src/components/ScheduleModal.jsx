@@ -5,8 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { setHours, setMinutes, addDays } from 'date-fns';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
-import { FINANCIAL_SERVICES } from '../constants/services';
 import MultiSelect from './MultiSelect';
+import { FINANCIAL_SERVICES } from '../constants/services';
 
 const Modal = styled.div`
   position: fixed;
@@ -104,8 +104,8 @@ const TextArea = styled.textarea`
   resize: vertical;
 `;
 
-const ScheduleModal = ({ isOpen, onClose }) => {
-  const { currentUser, signInWithGoogle, getAccessToken, accessToken } = useAuth();
+const ScheduleModal = ({ isOpen, onClose, onBeforeOpen }) => {
+  const { currentUser, signInWithGoogle, getAccessToken, silentSignIn } = useAuth();
   const [selectedDate, setSelectedDate] = useState(null);
   const [duration, setDuration] = useState('30');
   const [meetingType, setMeetingType] = useState('online');
@@ -118,6 +118,7 @@ const ScheduleModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState(null);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [weeklyAppointments, setWeeklyAppointments] = useState([]);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -126,20 +127,72 @@ const ScheduleModal = ({ isOpen, onClose }) => {
     }
   }, [currentUser]);
 
-  useEffect(() => {
-    if (currentUser && accessToken) {
-      fetchWeeklyAppointments();
-    }
-  }, [currentUser, accessToken]);
-
-  const fetchWeeklyAppointments = async () => {
+  const verifyToken = async () => {
     try {
+      setIsVerifying(true);
+      setError(null);
+
+      // Try silent sign-in first
+      if (!currentUser) {
+        await silentSignIn();
+      }
+
       const token = await getAccessToken();
       if (!token) {
         throw new Error('No access token available');
       }
 
-      const response = await axios.get(`http://localhost:3002/appointments/week`, {
+      const response = await axios.get('http://localhost:3002/calendar/verify-token', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.data.success) {
+        throw new Error('Token verification failed');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Token verification error:', error);
+      return false;
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleOpenModal = async () => {
+    setError(null);
+    const isValid = await verifyToken();
+    
+    if (!isValid) {
+      try {
+        setIsSigningIn(true);
+        await signInWithGoogle();
+        await fetchWeeklyAppointments();
+      } catch (err) {
+        console.error('Sign in error:', err);
+        setError('Failed to sign in. Please try again.');
+        onClose();
+        return;
+      } finally {
+        setIsSigningIn(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      handleOpenModal();
+    }
+  }, [isOpen]);
+
+  const fetchWeeklyAppointments = async () => {
+    try {
+      const token = await getAccessToken();
+      if (!token) throw new Error('No access token available');
+
+      const response = await axios.get(`http://localhost:3002/calendar/appointments/week`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -153,48 +206,27 @@ const ScheduleModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSignIn = async () => {
-    try {
-      setIsSigningIn(true);
-      setError(null);
-      await signInWithGoogle();
-    } catch (err) {
-      console.error('Sign in error:', err);
-      setError('Failed to sign in. Please try again and ensure popups are allowed.');
-    } finally {
-      setIsSigningIn(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    if (!name || !email || selectedServices.length === 0) {
-      setError('Please fill in all required fields and select at least one service.');
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      const token = await getAccessToken();
-      if (!token) {
-        throw new Error('No access token available. Please sign in again.');
+      // Verify token again before submitting
+      const isValid = await verifyToken();
+      if (!isValid) {
+        throw new Error('Please sign in again to schedule an appointment');
       }
 
-      const selectedServiceLabels = FINANCIAL_SERVICES
-        .filter(service => selectedServices.includes(service.id))
-        .map(service => service.label);
-
-      const response = await axios.post('http://localhost:3002/schedule', {
+      const token = await getAccessToken();
+      const response = await axios.post('http://localhost:3002/calendar/schedule', {
         selectedDate: selectedDate?.toISOString(),
         duration: parseInt(duration),
         meetingType,
         venue: meetingType === 'in-person' ? venue : 'Online Meeting',
         name,
         email,
-        services: selectedServiceLabels,
+        services: selectedServices,
         notes
       }, {
         headers: {
@@ -217,21 +249,12 @@ const ScheduleModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!currentUser) {
+  if (isVerifying || isSigningIn) {
     return (
       <Modal>
         <ModalContent>
-          <h2>Schedule an Appointment</h2>
-          <LoginMessage>
-            <p>Please sign in to schedule an appointment</p>
-            <LoginButton 
-              onClick={handleSignIn} 
-              disabled={isSigningIn}
-            >
-              {isSigningIn ? 'Signing in...' : 'Sign in with Google'}
-            </LoginButton>
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-          </LoginMessage>
+          <h2>Preparing Schedule...</h2>
+          <p>Please wait while we verify your credentials.</p>
         </ModalContent>
       </Modal>
     );

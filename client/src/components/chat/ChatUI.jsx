@@ -35,7 +35,7 @@ const ChatUI = () => {
       setError(null);
 
       try {
-        const response = await axios.post(`${BASE_URL}/generate`, {
+        const response = await axios.post(`${BASE_URL}/chat/generate`, {
           prompt: inputValue,
         });
         const assistantMessage = {
