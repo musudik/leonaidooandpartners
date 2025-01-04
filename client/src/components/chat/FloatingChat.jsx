@@ -152,6 +152,8 @@ const SendButton = styled.button`
   }
 `;
 
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const FloatingChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([{ text: "Hello! How can I help you?", isUser: false }]);
@@ -165,13 +167,17 @@ const FloatingChat = () => {
     setMessages(prev => [...prev, { text: message, isUser: true }]);
 
     try {
-      const response = await fetch('http://localhost:3002/chat/generate', {
+      const response = await fetch(`${BASE_URL}/chat/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ prompt: message }),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
       setMessages(prev => [...prev, { text: data.message, isUser: false }]);
