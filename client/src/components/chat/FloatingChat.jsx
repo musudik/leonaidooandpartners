@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Send, X, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Send, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import robot from '../../assets/robot.png';
 import styled from 'styled-components';
@@ -152,13 +152,26 @@ const SendButton = styled.button`
   }
 `;
 
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const FloatingChat = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([{ text: "Hello! How can I help you?", isUser: false }]);
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [connectionError, setConnectionError] = useState(false);
   const { t } = useTranslation();
+
+  // Initialize welcome message with translation
+  useEffect(() => {
+    setMessages([{ text: t('aiAssistant'), isUser: false }]);
+  }, [t]);
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -201,13 +214,13 @@ const FloatingChat = () => {
   return (
     <ChatContainer>
       <ChatButton onClick={() => setIsOpen(!isOpen)}>
-        <img src={robot} alt="Chat" />
+        <img src={robot} alt={t('aiAssistant')} />
       </ChatButton>
 
       {isOpen && (
         <ChatWindow>
           <ChatHeader>
-            <span>AI Assistant</span>
+            <span>{t('aiAssistant')}</span>
             <X 
               style={{ cursor: 'pointer' }} 
               onClick={() => setIsOpen(false)}
@@ -215,6 +228,11 @@ const FloatingChat = () => {
           </ChatHeader>
 
           <ChatBody>
+            {connectionError && (
+              <ErrorMessage>
+                {t('connectionError')}
+              </ErrorMessage>
+            )}
             {messages.map((msg, index) => (
               <Message key={index} isUser={msg.isUser}>
                 {msg.text}
@@ -229,8 +247,12 @@ const FloatingChat = () => {
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={t('placeholder')}
+              disabled={isLoading || connectionError}
             />
-            <SendButton onClick={handleSend} disabled={!message.trim()}>
+            <SendButton 
+              onClick={handleSend} 
+              disabled={!message.trim() || isLoading || connectionError}
+            >
               <Send size={18} />
             </SendButton>
           </InputArea>

@@ -1,7 +1,56 @@
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
+import { useState } from 'react';
+import axios from 'axios';
+
+// Get environment variables
+const EMAIL_HOST = import.meta.env.VITE_EMAIL_HOST || 'localhost';
+const EMAIL_PORT = import.meta.env.VITE_EMAIL_PORT || '3003';
 
 const About = () => {
-return (
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: '', message: '' });
+
+    try {
+      const response = await axios.post(`http://${EMAIL_HOST}:${EMAIL_PORT}/api/email/business`, {
+        to: "flexyazure@gmail.com",
+        subject: "New Business Query",
+        templateData: {
+          clientName: name || "Anonymous User",
+          querySubject: message || "General Business Query",
+          responseTime: "2 days"
+        }
+      });
+
+      if (response.data.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you for your message. We will get back to you soon!'
+        });
+        // Clear form
+        setName('');
+        setMessage('');
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to send message. Please try again later.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
     <div className="page-container bg-white min-h-screen">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12">
         {/* Header Section */}
@@ -59,31 +108,55 @@ return (
 
         {/* Contact Form */}
         <div className="bg-gray-50 py-16">
-            <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="max-w-6xl mx-auto px-4 md:px-6">
             <div className="max-w-2xl mx-auto">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 What Can We Offer For Your Business
-                </h2>
-                <p className="text-gray-600 mb-8">
-                Send us text. Click to select the text box. Click again or double click to start editing the text.
-                </p>
-                <form className="space-y-4">
+              </h2>
+              <p className="text-gray-600 mb-8">
+                Send us your query and we'll get back to you within 2 business days.
+              </p>
+              
+              {/* Status Message */}
+              {submitStatus.message && (
+                <div className={`p-4 mb-4 rounded-lg ${
+                  submitStatus.type === 'success' 
+                    ? 'bg-green-100 text-green-700' 
+                    : 'bg-red-100 text-red-700'
+                }`}>
+                  {submitStatus.message}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <input
-                    type="text"
-                    placeholder="Enter your Name"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#774800] focus:border-transparent"
+                  type="text"
+                  placeholder="Enter your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#774800] focus:border-transparent"
+                  required
                 />
                 <textarea
-                    placeholder="Enter your message"
-                    rows="4"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#774800] focus:border-transparent"
+                  placeholder="Enter your message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows="4"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#774800] focus:border-transparent"
+                  required
                 ></textarea>
-                <button className="bg-[#774800] text-white px-6 py-3 rounded-full font-medium hover:bg-[#f9a53a] transition-colors">
-                    SUBMIT
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`bg-[#774800] text-white px-6 py-3 rounded-full font-medium 
+                    ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#f9a53a]'} 
+                    transition-colors`}
+                >
+                  {isSubmitting ? 'SENDING...' : 'SUBMIT'}
                 </button>
-                </form>
+              </form>
             </div>
-            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { auth } from './firebaseConfig';
+import { auth } from './firebaseConfig';  
 import { 
   signInWithPopup, 
   GoogleAuthProvider,
@@ -21,75 +21,46 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
 
-  const silentSignIn = async () => {
-    try {
-      // Check if we have a stored auth session
-      const auth = getAuth();
-      if (auth.currentUser) {
-        const token = await auth.currentUser.getIdToken(true);
-        localStorage.setItem('googleAccessToken', token);
-        setAccessToken(token);
-        return auth.currentUser;
-      }
-
-      // Try to restore the Google session
-      const provider = new GoogleAuthProvider();
-      provider.addScope('https://www.googleapis.com/auth/calendar');
-      provider.addScope('https://www.googleapis.com/auth/calendar.events');
-      
-      // Set custom parameters for silent sign-in
-      provider.setCustomParameters({
-        prompt: 'none' // This prevents the popup and tries silent sign-in
-      });
-
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      
-      localStorage.setItem('googleAccessToken', token);
-      setAccessToken(token);
-      
-      return result.user;
-    } catch (error) {
-      // Silent sign-in failed, but this is expected if user is not already authenticated
-      console.log('Silent sign-in failed:', error);
-      return null;
-    }
-  };
-
   const signInWithGoogle = async () => {
     try {
+      // Set persistence first
       await setPersistence(auth, browserLocalPersistence);
       
+      // Create provider instance
       const provider = new GoogleAuthProvider();
+      
+      // Add necessary scopes
       provider.addScope('https://www.googleapis.com/auth/calendar');
       provider.addScope('https://www.googleapis.com/auth/calendar.events');
       
+      // Set custom parameters
       provider.setCustomParameters({
-        access_type: 'offline',
-        prompt: 'consent'
+        prompt: 'select_account'
       });
-  
+
+      // Clear any existing popup sessions
+      const auth = getAuth();
+      if (auth.currentUser) {
+        await firebaseSignOut(auth);
+      }
+
+      // Attempt sign in
       const result = await signInWithPopup(auth, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       
-      // Verify token with backend using the correct endpoint
-      const response = await axios.get('http://localhost:3002/calendar/verify-token', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-  
-      if (response.data.success) {
+      // Store token
+      if (token) {
         localStorage.setItem('googleAccessToken', token);
         setAccessToken(token);
-        return result.user;
-      } else {
-        throw new Error('Failed to verify token');
       }
+
+      return result.user;
     } catch (error) {
       console.error('Sign in error:', error);
+      // Clear any stored tokens on error
+      localStorage.removeItem('googleAccessToken');
+      setAccessToken(null);
       throw error;
     }
   };
@@ -106,28 +77,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const refreshToken = async () => {
-    if (!currentUser) return null;
-    
-    try {
-      const newToken = await currentUser.getIdToken(true);
-      localStorage.setItem('googleAccessToken', newToken);
-      setAccessToken(newToken);
-      return newToken;
-    } catch (error) {
-      console.error('Token refresh error:', error);
-      return null;
-    }
-  };
-
   const getAccessToken = async () => {
-    if (!currentUser) return null;
-    
     try {
-      const token = localStorage.getItem('googleAccessToken');
-      if (!token) {
-        return await refreshToken();
-      }
+      if (!currentUser) return null;
+      const token = await currentUser.getIdToken(true);
+      setAccessToken(token);
       return token;
     } catch (error) {
       console.error('Error getting access token:', error);
@@ -136,43 +90,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    let tokenRefreshInterval;
-
-    const initializeAuth = async () => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
-        // Try silent sign-in first
-        await silentSignIn();
-        
-        // Set up auth state listener
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
           setCurrentUser(user);
-          if (user) {
-            await getAccessToken();
-            
-            // Refresh token every 45 minutes
-            tokenRefreshInterval = setInterval(refreshToken, 45 * 60 * 1000);
-          } else {
-            if (tokenRefreshInterval) {
-              clearInterval(tokenRefreshInterval);
-            }
-          }
-          setLoading(false);
-        });
-
-        return unsubscribe;
+          const token = await user.getIdToken();
+          setAccessToken(token);
+        } else {
+          setCurrentUser(null);
+          setAccessToken(null);
+          localStorage.removeItem('googleAccessToken');
+        }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error('Auth state change error:', error);
+      } finally {
         setLoading(false);
       }
-    };
+    });
 
-    initializeAuth();
-
-    return () => {
-      if (tokenRefreshInterval) {
-        clearInterval(tokenRefreshInterval);
-      }
-    };
+    return unsubscribe;
   }, []);
 
   const value = {
@@ -180,8 +116,7 @@ export const AuthProvider = ({ children }) => {
     signInWithGoogle,
     signOut,
     getAccessToken,
-    accessToken,
-    silentSignIn
+    accessToken
   };
 
   return (
@@ -190,3 +125,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
