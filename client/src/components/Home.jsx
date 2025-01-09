@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import ContactForm from './ContactForm';
 import ServiceSection from './ServiceSection';
 import { useState } from 'react';
-import ScheduleModal from './ScheduleModal';
+//import ScheduleModal from './ScheduleModal';
 
 const TeamSection = styled.div`
   padding: 4rem 0;
@@ -325,10 +325,10 @@ const Profile = () => {
         onClose={() => setIsContactFormOpen(false)} 
       />
       
-      <ScheduleModal 
+      {/* <ScheduleModal 
         isOpen={isScheduleModalOpen} 
         onClose={() => setIsScheduleModalOpen(false)} 
-      />
+      /> */}
     </div>
   );
 };

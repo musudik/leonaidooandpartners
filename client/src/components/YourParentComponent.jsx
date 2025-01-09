@@ -14,10 +14,10 @@ const YourParentComponent = () => {
         SCHEDULE CONSULTATION
       </button>
 
-      <ScheduleModal 
+      {/* <ScheduleModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-      />
+      /> */}
     </div>
   );
 };

@@ -1,388 +1,388 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import { setHours, setMinutes, addDays } from 'date-fns';
-import axios from 'axios';
-import { useAuth } from './AuthContext';
-import MultiSelect from './MultiSelect';
-import { FINANCIAL_SERVICES } from '../constants/services';
+// import React, { useState, useEffect } from 'react';
+// import styled from 'styled-components';
+// import DatePicker from 'react-datepicker';
+// import "react-datepicker/dist/react-datepicker.css";
+// import { setHours, setMinutes, addDays } from 'date-fns';
+// import axios from 'axios';
+// import { useAuth } from './AuthContext';
+// import MultiSelect from './MultiSelect';
+// import { FINANCIAL_SERVICES } from '../constants/services';
 
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
+// const Modal = styled.div`
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background: rgba(0, 0, 0, 0.5);
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   z-index: 1000;
+// `;
 
-const ModalContent = styled.div`
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+// const ModalContent = styled.div`
+//   background: white;
+//   padding: 2rem;
+//   border-radius: 8px;
+//   width: 90%;
+//   max-width: 500px;
+//   max-height: 90vh;
+//   overflow-y: auto;
 
-  h2 {
-    color: #774800;
-    margin-bottom: 1.5rem;
-  }
-`;
+//   h2 {
+//     color: #774800;
+//     margin-bottom: 1.5rem;
+//   }
+// `;
 
-const FormGroup = styled.div`
-  margin-bottom: 1.5rem;
+// const FormGroup = styled.div`
+//   margin-bottom: 1.5rem;
 
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #774800;
-  }
+//   label {
+//     display: block;
+//     margin-bottom: 0.5rem;
+//     color: #774800;
+//   }
 
-  select, input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+//   select, input {
+//     width: 100%;
+//     padding: 0.5rem;
+//     border: 1px solid #ddd;
+//     border-radius: 4px;
     
-    &:focus {
-      outline: none;
-      border-color: #774800;
-    }
-  }
-`;
+//     &:focus {
+//       outline: none;
+//       border-color: #774800;
+//     }
+//   }
+// `;
 
-const Button = styled.button`
-  background: #774800;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 1rem;
+// const Button = styled.button`
+//   background: #774800;
+//   color: white;
+//   padding: 0.75rem 1.5rem;
+//   border: none;
+//   border-radius: 4px;
+//   cursor: pointer;
+//   margin-right: 1rem;
 
-  &:hover {
-    background: #8b5500;
-  }
+//   &:hover {
+//     background: #8b5500;
+//   }
 
-  &.cancel {
-    background: #666;
-  }
-`;
+//   &.cancel {
+//     background: #666;
+//   }
+// `;
 
-const ErrorMessage = styled.div`
-  color: #dc3545;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-`;
+// const ErrorMessage = styled.div`
+//   color: #dc3545;
+//   margin-bottom: 1rem;
+//   font-size: 0.875rem;
+// `;
 
-const LoginMessage = styled.div`
-  text-align: center;
-  margin: 2rem;
-`;
+// const LoginMessage = styled.div`
+//   text-align: center;
+//   margin: 2rem;
+// `;
 
-const LoginButton = styled(Button)`
-  background: #4285f4;
-  &:hover {
-    background: #357abd;
-  }
-`;
+// const LoginButton = styled(Button)`
+//   background: #4285f4;
+//   &:hover {
+//     background: #357abd;
+//   }
+// `;
 
-const TextArea = styled.textarea`
-  width: 100%;
-  min-height: 100px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-top: 5px;
-  resize: vertical;
-`;
+// const TextArea = styled.textarea`
+//   width: 100%;
+//   min-height: 100px;
+//   padding: 8px;
+//   border: 1px solid #ddd;
+//   border-radius: 4px;
+//   margin-top: 5px;
+//   resize: vertical;
+// `;
 
-const ScheduleModal = ({ isOpen, onClose, onBeforeOpen }) => {
-  const { currentUser, signInWithGoogle, getAccessToken, silentSignIn } = useAuth();
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [duration, setDuration] = useState('30');
-  const [meetingType, setMeetingType] = useState('online');
-  const [venue, setVenue] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [notes, setNotes] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-  const [isSigningIn, setIsSigningIn] = useState(false);
-  const [weeklyAppointments, setWeeklyAppointments] = useState([]);
-  const [isVerifying, setIsVerifying] = useState(false);
+// const ScheduleModal = ({ isOpen, onClose, onBeforeOpen }) => {
+//   const { currentUser, signInWithGoogle, getAccessToken, silentSignIn } = useAuth();
+//   const [selectedDate, setSelectedDate] = useState(null);
+//   const [duration, setDuration] = useState('30');
+//   const [meetingType, setMeetingType] = useState('online');
+//   const [venue, setVenue] = useState('');
+//   const [name, setName] = useState('');
+//   const [email, setEmail] = useState('');
+//   const [selectedServices, setSelectedServices] = useState([]);
+//   const [notes, setNotes] = useState('');
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [error, setError] = useState(null);
+//   const [isSigningIn, setIsSigningIn] = useState(false);
+//   const [weeklyAppointments, setWeeklyAppointments] = useState([]);
+//   const [isVerifying, setIsVerifying] = useState(false);
 
-  useEffect(() => {
-    if (currentUser) {
-      setEmail(currentUser.email || '');
-      setName(currentUser.displayName || '');
-    }
-  }, [currentUser]);
+//   useEffect(() => {
+//     if (currentUser) {
+//       setEmail(currentUser.email || '');
+//       setName(currentUser.displayName || '');
+//     }
+//   }, [currentUser]);
 
-  const verifyToken = async () => {
-    try {
-      setIsVerifying(true);
-      setError(null);
+//   const verifyToken = async () => {
+//     try {
+//       setIsVerifying(true);
+//       setError(null);
 
-      // Try silent sign-in first
-      if (!currentUser) {
-        await silentSignIn();
-      }
+//       // Try silent sign-in first
+//       if (!currentUser) {
+//         await silentSignIn();
+//       }
 
-      const token = await getAccessToken();
-      if (!token) {
-        throw new Error('No access token available');
-      }
+//       const token = await getAccessToken();
+//       if (!token) {
+//         throw new Error('No access token available');
+//       }
 
-      const response = await axios.get('http://localhost:3002/calendar/verify-token', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+//       const response = await axios.get('http://localhost:3002/calendar/verify-token', {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
 
-      if (!response.data.success) {
-        throw new Error('Token verification failed');
-      }
+//       if (!response.data.success) {
+//         throw new Error('Token verification failed');
+//       }
 
-      return true;
-    } catch (error) {
-      console.error('Token verification error:', error);
-      return false;
-    } finally {
-      setIsVerifying(false);
-    }
-  };
+//       return true;
+//     } catch (error) {
+//       console.error('Token verification error:', error);
+//       return false;
+//     } finally {
+//       setIsVerifying(false);
+//     }
+//   };
 
-  const handleOpenModal = async () => {
-    setError(null);
-    const isValid = await verifyToken();
+//   const handleOpenModal = async () => {
+//     setError(null);
+//     const isValid = await verifyToken();
     
-    if (!isValid) {
-      try {
-        setIsSigningIn(true);
-        await signInWithGoogle();
-        await fetchWeeklyAppointments();
-      } catch (err) {
-        console.error('Sign in error:', err);
-        setError('Failed to sign in. Please try again.');
-        onClose();
-        return;
-      } finally {
-        setIsSigningIn(false);
-      }
-    }
-  };
+//     if (!isValid) {
+//       try {
+//         setIsSigningIn(true);
+//         await signInWithGoogle();
+//         await fetchWeeklyAppointments();
+//       } catch (err) {
+//         console.error('Sign in error:', err);
+//         setError('Failed to sign in. Please try again.');
+//         onClose();
+//         return;
+//       } finally {
+//         setIsSigningIn(false);
+//       }
+//     }
+//   };
 
-  useEffect(() => {
-    if (isOpen) {
-      handleOpenModal();
-    }
-  }, [isOpen]);
+//   useEffect(() => {
+//     if (isOpen) {
+//       handleOpenModal();
+//     }
+//   }, [isOpen]);
 
-  const fetchWeeklyAppointments = async () => {
-    try {
-      const token = await getAccessToken();
-      if (!token) throw new Error('No access token available');
+//   const fetchWeeklyAppointments = async () => {
+//     try {
+//       const token = await getAccessToken();
+//       if (!token) throw new Error('No access token available');
 
-      const response = await axios.get(`http://localhost:3002/calendar/appointments/week`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+//       const response = await axios.get(`http://localhost:3002/calendar/appointments/week`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
 
-      if (response.data.success) {
-        setWeeklyAppointments(response.data.events);
-      }
-    } catch (err) {
-      console.error('Error fetching appointments:', err);
-    }
-  };
+//       if (response.data.success) {
+//         setWeeklyAppointments(response.data.events);
+//       }
+//     } catch (err) {
+//       console.error('Error fetching appointments:', err);
+//     }
+//   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsSubmitting(true);
+//     setError(null);
 
-    try {
-      // Verify token again before submitting
-      const isValid = await verifyToken();
-      if (!isValid) {
-        throw new Error('Please sign in again to schedule an appointment');
-      }
+//     try {
+//       // Verify token again before submitting
+//       const isValid = await verifyToken();
+//       if (!isValid) {
+//         throw new Error('Please sign in again to schedule an appointment');
+//       }
 
-      const token = await getAccessToken();
-      const response = await axios.post('http://localhost:3002/calendar/schedule', {
-        selectedDate: selectedDate?.toISOString(),
-        duration: parseInt(duration),
-        meetingType,
-        venue: meetingType === 'in-person' ? venue : 'Online Meeting',
-        name,
-        email,
-        services: selectedServices,
-        notes
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+//       const token = await getAccessToken();
+//       const response = await axios.post('http://localhost:3002/calendar/schedule', {
+//         selectedDate: selectedDate?.toISOString(),
+//         duration: parseInt(duration),
+//         meetingType,
+//         venue: meetingType === 'in-person' ? venue : 'Online Meeting',
+//         name,
+//         email,
+//         services: selectedServices,
+//         notes
+//       }, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
 
-      if (response.data.success) {
-        await fetchWeeklyAppointments();
-        onClose();
-        alert('Appointment scheduled successfully!');
-      } else {
-        throw new Error(response.data.error || 'Failed to schedule appointment');
-      }
-    } catch (err) {
-      console.error('Scheduling error:', err);
-      setError(err.response?.data?.error || err.message || 'Failed to schedule appointment. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+//       if (response.data.success) {
+//         await fetchWeeklyAppointments();
+//         onClose();
+//         alert('Appointment scheduled successfully!');
+//       } else {
+//         throw new Error(response.data.error || 'Failed to schedule appointment');
+//       }
+//     } catch (err) {
+//       console.error('Scheduling error:', err);
+//       setError(err.response?.data?.error || err.message || 'Failed to schedule appointment. Please try again.');
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
 
-  if (isVerifying || isSigningIn) {
-    return (
-      <Modal>
-        <ModalContent>
-          <h2>Preparing Schedule...</h2>
-          <p>Please wait while we verify your credentials.</p>
-        </ModalContent>
-      </Modal>
-    );
-  }
+//   if (isVerifying || isSigningIn) {
+//     return (
+//       <Modal>
+//         <ModalContent>
+//           <h2>Preparing Schedule...</h2>
+//           <p>Please wait while we verify your credentials.</p>
+//         </ModalContent>
+//       </Modal>
+//     );
+//   }
 
-  const filterTimes = (time) => {
-    const day = time.getDay();
-    if (day === 0) return false; // Sunday not available
+//   const filterTimes = (time) => {
+//     const day = time.getDay();
+//     if (day === 0) return false; // Sunday not available
     
-    const hours = time.getHours();
-    return hours >= 11 && hours < 20; // Available 11:00-20:00
-  };
+//     const hours = time.getHours();
+//     return hours >= 11 && hours < 20; // Available 11:00-20:00
+//   };
 
-  return isOpen ? (
-    <Modal>
-      <ModalContent>
-        <h2>Schedule an Appointment</h2>
-        <form onSubmit={handleSubmit}>
-          <FormGroup>
-            <label>Name *</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </FormGroup>
+//   return isOpen ? (
+//     <Modal>
+//       <ModalContent>
+//         <h2>Schedule an Appointment</h2>
+//         <form onSubmit={handleSubmit}>
+//           <FormGroup>
+//             <label>Name *</label>
+//             <input
+//               type="text"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               required
+//             />
+//           </FormGroup>
 
-          <FormGroup>
-            <label>Email *</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </FormGroup>
+//           <FormGroup>
+//             <label>Email *</label>
+//             <input
+//               type="email"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               required
+//             />
+//           </FormGroup>
 
-          <FormGroup>
-            <label>Services Required *</label>
-            <MultiSelect
-              options={FINANCIAL_SERVICES}
-              value={selectedServices}
-              onChange={setSelectedServices}
-              placeholder="Select services..."
-            />
-          </FormGroup>
+//           <FormGroup>
+//             <label>Services Required *</label>
+//             <MultiSelect
+//               options={FINANCIAL_SERVICES}
+//               value={selectedServices}
+//               onChange={setSelectedServices}
+//               placeholder="Select services..."
+//             />
+//           </FormGroup>
 
-          <FormGroup>
-            <label>Select Date and Time *</label>
-            <DatePicker
-              selected={selectedDate}
-              onChange={setSelectedDate}
-              showTimeSelect
-              filterTime={filterTimes}
-              minTime={setHours(setMinutes(new Date(), 0), 11)}
-              maxTime={setHours(setMinutes(new Date(), 0), 20)}
-              minDate={new Date()}
-              maxDate={addDays(new Date(), 30)}
-              dateFormat="MMMM d, yyyy h:mm aa"
-              placeholderText="Select date and time"
-              required
-            />
-          </FormGroup>
+//           <FormGroup>
+//             <label>Select Date and Time *</label>
+//             <DatePicker
+//               selected={selectedDate}
+//               onChange={setSelectedDate}
+//               showTimeSelect
+//               filterTime={filterTimes}
+//               minTime={setHours(setMinutes(new Date(), 0), 11)}
+//               maxTime={setHours(setMinutes(new Date(), 0), 20)}
+//               minDate={new Date()}
+//               maxDate={addDays(new Date(), 30)}
+//               dateFormat="MMMM d, yyyy h:mm aa"
+//               placeholderText="Select date and time"
+//               required
+//             />
+//           </FormGroup>
 
-          <FormGroup>
-            <label>Duration *</label>
-            <select 
-              value={duration} 
-              onChange={(e) => setDuration(e.target.value)}
-              required
-            >
-              <option value="30">30 minutes</option>
-              <option value="60">1 hour</option>
-              <option value="90">1.5 hours</option>
-              <option value="120">2 hours</option>
-              <option value="180">3 hours</option>
-            </select>
-          </FormGroup>
+//           <FormGroup>
+//             <label>Duration *</label>
+//             <select 
+//               value={duration} 
+//               onChange={(e) => setDuration(e.target.value)}
+//               required
+//             >
+//               <option value="30">30 minutes</option>
+//               <option value="60">1 hour</option>
+//               <option value="90">1.5 hours</option>
+//               <option value="120">2 hours</option>
+//               <option value="180">3 hours</option>
+//             </select>
+//           </FormGroup>
 
-          <FormGroup>
-            <label>Meeting Type *</label>
-            <select 
-              value={meetingType} 
-              onChange={(e) => setMeetingType(e.target.value)}
-              required
-            >
-              <option value="online">Online</option>
-              <option value="in-person">In Person</option>
-            </select>
-          </FormGroup>
+//           <FormGroup>
+//             <label>Meeting Type *</label>
+//             <select 
+//               value={meetingType} 
+//               onChange={(e) => setMeetingType(e.target.value)}
+//               required
+//             >
+//               <option value="online">Online</option>
+//               <option value="in-person">In Person</option>
+//             </select>
+//           </FormGroup>
 
-          {meetingType === 'in-person' && (
-            <FormGroup>
-              <label>Venue *</label>
-              <input
-                type="text"
-                value={venue}
-                onChange={(e) => setVenue(e.target.value)}
-                placeholder="Enter meeting venue"
-                required
-              />
-            </FormGroup>
-          )}
+//           {meetingType === 'in-person' && (
+//             <FormGroup>
+//               <label>Venue *</label>
+//               <input
+//                 type="text"
+//                 value={venue}
+//                 onChange={(e) => setVenue(e.target.value)}
+//                 placeholder="Enter meeting venue"
+//                 required
+//               />
+//             </FormGroup>
+//           )}
 
-          <FormGroup>
-            <label>Additional Notes</label>
-            <TextArea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Any specific questions or concerns?"
-            />
-          </FormGroup>
+//           <FormGroup>
+//             <label>Additional Notes</label>
+//             <TextArea
+//               value={notes}
+//               onChange={(e) => setNotes(e.target.value)}
+//               placeholder="Any specific questions or concerns?"
+//             />
+//           </FormGroup>
 
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+//           {error && <ErrorMessage>{error}</ErrorMessage>}
           
-          <div>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Scheduling...' : 'Schedule Appointment'}
-            </Button>
-            <Button type="button" className="cancel" onClick={onClose}>
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </ModalContent>
-    </Modal>
-  ) : null;
-};
+//           <div>
+//             <Button type="submit" disabled={isSubmitting}>
+//               {isSubmitting ? 'Scheduling...' : 'Schedule Appointment'}
+//             </Button>
+//             <Button type="button" className="cancel" onClick={onClose}>
+//               Cancel
+//             </Button>
+//           </div>
+//         </form>
+//       </ModalContent>
+//     </Modal>
+//   ) : null;
+// };
 
-export default ScheduleModal; 
+// export default ScheduleModal; 
