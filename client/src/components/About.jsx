@@ -19,7 +19,7 @@ const About = () => {
 
     try {
       const response = await axios.post(`http://${EMAIL_HOST}:${EMAIL_PORT}/api/email/business`, {
-        to: "flexyazure@gmail.com",
+        to: "leo@leonaidoo.com",
         subject: "New Business Query",
         templateData: {
           clientName: name || "Anonymous User",
