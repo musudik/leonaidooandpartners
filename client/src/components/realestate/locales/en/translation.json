@@ -1,0 +1,121 @@
+{
+  "title": "Self-Disclosure",
+  "steps": {
+    "personal": "Personal Information",
+    "household": "Household Income",
+    "assets": "Assets & Liabilities",
+    "review": "Review & Submit"
+  },
+  "fields": {
+    "select": "Please select",
+    "personalInfo": {
+      "title": "Personal Information",
+      "applicantA": "Applicant (A)",
+      "applicantB": "Applicant (B)",
+      "fullName": "Full Name (Birth name if different!)",
+      "address": "Address",
+      "telephone": "Phone Number",
+      "email": "Email ID",
+      "birthInfo": "Date and Place of Birth",
+      "birthInfoPlaceholder": "DD.MM.YYYY, City",
+      "nationality": "Nationality",
+      "maritalStatus": "Marital Status",
+      "maritalStatus": {
+        "single": "Single",
+        "married": "Married",
+        "divorced": "Divorced",
+        "widowed": "Widowed"
+      },
+      "children": "Children (Date of Birth)",
+      "childrenPlaceholder": "DD.MM.YYYY (separate multiple with comma)",
+      "occupation": "Occupation",
+      "occupationSince": "Occupation Since",
+      "bankDetails": "Bank Details (IBAN)"
+    },
+    "householdBudget": {
+      "title": "Household Income",
+      "monthlyNetIncome": "Monthly Net Income",
+      "otherIncome": "Other Monthly Income:",
+      "otherIncomeNote": "(e.g. child benefits, rental income, etc.)",
+      "familyIncome": "Income from other family members:",
+      "totalIncome": "= Total Income",
+      "expenses": {
+        "title": "Household Expenses",
+        "rent": "Rent",
+        "living": "Living Expenses",
+        "savings": "Savings Plans incl. Building Society",
+        "insurances": "Insurances",
+        "personalLoans": "EMI Personal Loans",
+        "propertyLoans": "EMI Property Loans",
+        "otherExpenses": "Other Regular Expenses",
+        "totalExpenses": "= Total Expenses",
+        "availableCapital": "= Available Capital",
+        "additionalIncome": "Additional Monthly Income"
+      }
+    },
+    "assets": {
+      "title": "Assets & Liabilities",
+      "bankAccounts": {
+        "title": "Bank Accounts",
+        "account1": "Account 1",
+        "account2": "Account 2",
+        "account3": "Account 3"
+      },
+      "buildingSociety": {
+        "title": "Building Society Savings",
+        "account1": "Account 1",
+        "account2": "Account 2",
+        "account3": "Account 3"
+      },
+      "lifeInsurance": {
+        "title": "Life Insurance",
+        "policy1": "Policy 1",
+        "policy2": "Policy 2",
+        "policy3": "Policy 3"
+      },
+      "realEstate": {
+        "title": "Real Estate Property",
+        "property1": "Property 1",
+        "property2": "Property 2",
+        "property3": "Property 3"
+      },
+      "otherAssets": {
+        "title": "Other Assets",
+        "asset1": "Asset 1",
+        "asset2": "Asset 2",
+        "asset3": "Asset 3"
+      },
+      "liabilities": {
+        "title": "Liabilities",
+        "liability1": "Liability 1",
+        "liability2": "Liability 2",
+        "liability3": "Liability 3"
+      }
+    },
+    "consent": {
+      "schufa": "I/We consent that the bank may transmit data regarding the application and conclusion of this account to the SCHUFA (Credit Protection Association) responsible for my/our place of residence.",
+      "bankruptcy": "No composition or insolvency proceedings have been filed or opened against my/our assets to date. I/We have not made any statutory declaration about my/our financial circumstances; no application for such a statutory declaration has been filed against me/us to date.",
+      "confirmation": "I/We confirm that all the above information has been provided completely and truthfully.",
+      "place": "Place",
+      "date": "Date",
+      "signatureA": "Signature Applicant (A)",
+      "signatureB": "Signature Applicant (B)"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidDate": "Please enter a valid date",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidIBAN": "Please enter a valid IBAN",
+    "invalidNumber": "Please enter a valid number"
+  },
+  "buttons": {
+    "next": "Next",
+    "back": "Back",
+    "submit": "Submit"
+  },
+  "messages": {
+    "submitSuccess": "Form submitted successfully",
+    "submitError": "Error submitting form. Please try again."
+  }
+}

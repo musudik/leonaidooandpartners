@@ -1,0 +1,121 @@
+{
+  "title": "Selbstauskunft",
+  "steps": {
+    "personal": "Persönliche Informationen",
+    "household": "Haushaltseinkommen",
+    "assets": "Vermögensverhältnisse",
+    "review": "Überprüfung & Absenden"
+  },
+  "fields": {
+    "select": "Bitte auswählen",
+    "personalInfo": {
+      "title": "Persönliche Informationen",
+      "applicantA": "Kreditantragsteller (A)",
+      "applicantB": "Kreditantragsteller (B)",
+      "fullName": "Vor- & Nachname (Geburtsname, falls abweichend!)",
+      "address": "Adresse",
+      "telephone": "Telefonnummer",
+      "email": "E-Mail ID",
+      "birthInfo": "Geburtsdatum und -ort",
+      "birthInfoPlaceholder": "TT.MM.JJJJ, Stadt",
+      "nationality": "Nationalität",
+      "maritalStatus": "Familienstand",
+      "maritalStatus": {
+        "single": "Ledig",
+        "married": "Verheiratet",
+        "divorced": "Geschieden",
+        "widowed": "Verwitwet"
+      },
+      "children": "Kinder (Geburtsdatum)",
+      "childrenPlaceholder": "TT.MM.JJJJ (mehrere mit Komma trennen)",
+      "occupation": "Beruf",
+      "occupationSince": "Beruf seit",
+      "bankDetails": "Bankverbindung (IBAN)"
+    },
+    "householdBudget": {
+      "title": "Haushaltseinkommen",
+      "monthlyNetIncome": "Monatliches Nettoeinkommen",
+      "otherIncome": "Monatliches Einkommen (sonstiges):",
+      "otherIncomeNote": "(z.B. Kindergeld, Mieteinnahmen, etc.)",
+      "familyIncome": "Einkommen anderer Familienmitglieder:",
+      "totalIncome": "= Gesamteinkommen",
+      "expenses": {
+        "title": "Haushaltsausgaben",
+        "rent": "Miete",
+        "living": "Lebenshaltungskosten",
+        "savings": "Sparpläne inkl. Bausparverträge",
+        "insurances": "Versicherungen",
+        "personalLoans": "EMI Privatdarlehen",
+        "propertyLoans": "EMI Immobiliendarlehen",
+        "otherExpenses": "Sonstige regelmäßige Ausgaben",
+        "totalExpenses": "= Gesamtausgaben",
+        "availableCapital": "= Verfügbares Kapital",
+        "additionalIncome": "Zusätzliches monatliches Einkommen"
+      }
+    },
+    "assets": {
+      "title": "Vermögensverhältnisse",
+      "bankAccounts": {
+        "title": "Bank- / Sparkassenguthaben",
+        "account1": "Konto 1",
+        "account2": "Konto 2",
+        "account3": "Konto 3"
+      },
+      "buildingSociety": {
+        "title": "Bausparguthaben",
+        "account1": "Konto 1",
+        "account2": "Konto 2",
+        "account3": "Konto 3"
+      },
+      "lifeInsurance": {
+        "title": "Lebensversicherung",
+        "policy1": "Police 1",
+        "policy2": "Police 2",
+        "policy3": "Police 3"
+      },
+      "realEstate": {
+        "title": "Haus- und Grundbesitz",
+        "property1": "Immobilie 1",
+        "property2": "Immobilie 2",
+        "property3": "Immobilie 3"
+      },
+      "otherAssets": {
+        "title": "Sonstige Vermögenswerte",
+        "asset1": "Vermögenswert 1",
+        "asset2": "Vermögenswert 2",
+        "asset3": "Vermögenswert 3"
+      },
+      "liabilities": {
+        "title": "Verbindlichkeiten",
+        "liability1": "Verbindlichkeit 1",
+        "liability2": "Verbindlichkeit 2",
+        "liability3": "Verbindlichkeit 3"
+      }
+    },
+    "consent": {
+      "schufa": "Ich/Wir willigen ein, dass die Bank der für meinen/unseren Wohnsitz zuständigen SCHUFA-Gesellschaft (Schutzgemeinschaft für allgemeine Kreditsicherung) Daten über die Beantragung und den Abschluss dieses Kontos übermittelt.",
+      "bankruptcy": "Über mein/unser Vermögen wurde bisher weder ein Vergleichs- noch ein Insolvenzverfahren beantragt oder eröffnet. Ich habe/Wir haben keine eidesstattliche Versicherung über meine/unsere Vermögensverhältnisse abgegeben; ein Antrag auf Abgabe einer solchen eidesstattlichen Versicherung wurde bisher nicht gegen mich/uns gestellt.",
+      "confirmation": "Ich versichere/Wir versichern, dass ich/wir alle vorstehenden Angaben vollständig und wahrheitsgemäß gemacht habe/haben.",
+      "place": "Ort",
+      "date": "Datum",
+      "signatureA": "Unterschrift Kreditantragsteller (A)",
+      "signatureB": "Unterschrift Kreditantragsteller (B)"
+    }
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidDate": "Bitte geben Sie ein gültiges Datum ein",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "invalidIBAN": "Bitte geben Sie eine gültige IBAN ein",
+    "invalidNumber": "Bitte geben Sie eine gültige Zahl ein"
+  },
+  "buttons": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "submit": "Absenden"
+  },
+  "messages": {
+    "submitSuccess": "Formular erfolgreich übermittelt",
+    "submitError": "Fehler beim Übermitteln des Formulars. Bitte versuchen Sie es erneut."
+  }
+}

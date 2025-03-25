@@ -131,7 +131,7 @@ const Navbar = () => {
           { name: 'Gold', icon: 'gold', path: '/gold' },
           { name: 'Sponsored Events', icon: 'gift', path: '/sponsored-events' },
           { name: 'Tax Services', icon: 'tax', path: '/tax-returns' },
-          { name: 'AI', icon: 'tax', path: '/ai' },
+          { name: 'Startup Solutions', icon: 'tax', path: '/startup-solutions' },
         ],
     },
     {
