@@ -87,7 +87,7 @@ app.post("/schedule", async (c) => {
     endTime.setMinutes(endTime.getMinutes() + parseInt(body.duration));
 
     const event = {
-      summary: 'Consultation with Leo Naidoo & Partners',
+      summary: 'Consultation with Leonaidoo & Partners',
       description: `Meeting Type: ${body.meetingType}\n${body.meetingType === 'in-person' ? `Venue: ${body.venue}` : 'Online Meeting'}`,
       start: {
         dateTime: selectedDate.toISOString(),

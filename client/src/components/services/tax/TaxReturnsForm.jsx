@@ -967,7 +967,7 @@ const TaxReturnsForm = ({ isOpen, onClose }) => {
       <FormCard show={isOpen}>
         <Header>
             <LogoSection>
-            <Logo src={logo} alt="Leo Naidoo & Partners" />
+            <Logo src={logo} alt="Leonaidoo & Partners" />
             <Title>German Tax Return Form</Title>
             </LogoSection>
             

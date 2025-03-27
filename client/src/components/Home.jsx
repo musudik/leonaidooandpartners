@@ -253,35 +253,10 @@ const Profile = () => {
         {/* Hero Section */}
         <Carousel />
         <div className="grid gap-12 items-center">
-          <div>
-            {/* Header Section */}
-            <div className="mt-16">
-              <h3 className="text-6xl font-black mb-2">
-                <span className="text-[#774800]">Leo Naidoo </span>
-                <span className="text-[#74767a] ml-2">& Partners</span>
-              </h3>
-            </div>
-            <p className="text-gray-600 mb-2">
-              <b><span className="text-[#774800]">Welcome to Leo Naidoo & Partners: Your Trusted Ally in Financial Freedom </span>
-              </b>
-              <p>At Leo Naidoo & Partners, we're more than financial advisors – we're your partners in building a secure, 
-                successful, and stress-free future. Whether you're planning for retirement, navigating taxes, 
-                or exploring loans, our expert team is here to guide you every step of the way.</p>
-            </p>
-
             {/* Replace the old Services section with the new ServiceSection component */}
             <ServiceSection />
 
             {/* Why Choose Us Section */}
-            <WhyChooseSection>
-              <ServiceTitle><span className="text-[#774800]">Why Choose Us?</span></ServiceTitle>
-              <p className="text-sm text-gray-600 mx-auto leading-relaxed">
-                With Leo Naidoo & Partners, you gain access to a team that's passionate about empowering your financial journey.
-                From personalized consultations to robust solutions, we work tirelessly to unlock your financial potential.
-              </p>
-              <p className="text-sm font-medium text-gray-700 mt-4">
-                Your financial success starts here. Let's shape your future – together.
-              </p>
               <ActionButtons>
                 <Button onClick={() => setIsContactFormOpen(true)}>
                   GET CONTACT
@@ -290,8 +265,6 @@ const Profile = () => {
                   SCHEDULE CONSULTATION
                 </Button>
               </ActionButtons>
-            </WhyChooseSection>
-          </div>
         </div>
         
         {/* Partners Section */}
