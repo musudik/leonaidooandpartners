@@ -1,0 +1,13 @@
+
+run = "cd client && npm install && npm run dev"
+modules = ["nodejs-20:v8-20230920-bd784b9"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+build = ["sh", "-c", "cd client && npm install && npm run build"]
+run = ["sh", "-c", "cd client && npm run preview -- --host 0.0.0.0 --port 3000"]
+
+[env]
+REPLIT_DISABLE_PACKAGE_LAYER = "1"
