@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Send, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import robot from '../../assets/robot.png';
 import styled from 'styled-components';
@@ -40,6 +40,7 @@ const ChatWindow = styled.div`
   bottom: 80px;
   right: 0;
   width: 350px;
+  height: 400px;
   background: white;
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
@@ -73,143 +74,86 @@ const ChatHeader = styled.div`
   align-items: center;
 `;
 
-const ChatBody = styled.div`
-  height: 300px;
-  overflow-y: auto;
-  padding: 15px;
-  background: #f5f5f5;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #774800;
-    border-radius: 3px;
-  }
+const ChatFrameContainer = styled.div`
+  height: calc(100% - 50px); // 50px is header height
+  width: 100%;
 `;
-
-const Message = styled.div`
-  margin: 8px 0;
-  padding: 10px 15px;
-  border-radius: 15px;
-  max-width: 80%;
-  word-wrap: break-word;
-  ${props => props.isUser ? `
-    background: #774800;
-    color: white;
-    margin-left: auto;
-  ` : `
-    background: white;
-    color: #333;
-    margin-right: auto;
-  `}
-`;
-
-const InputArea = styled.div`
-  padding: 15px;
-  background: white;
-  display: flex;
-  gap: 10px;
-  border-top: 1px solid #eee;
-`;
-
-const Input = styled.input`
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  outline: none;
-
-  &:focus {
-    border-color: #774800;
-  }
-`;
-
-const SendButton = styled.button`
-  background: #774800;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s;
-
-  &:hover {
-    background: #8b5500;
-  }
-
-  &:disabled {
-    background: #ccc;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  text-align: center;
-  margin-bottom: 10px;
-`;
-
-export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const FloatingChat = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [connectionError, setConnectionError] = useState(false);
+  const chatWindowRef = useRef(null);
+  const chatFrameContainerRef = useRef(null);
   const { t } = useTranslation();
+  const widgetLoaded = useRef(false);
 
-  // Initialize welcome message with translation
+  // Initialize and manage the chatbot
   useEffect(() => {
-    setMessages([{ text: t('aiAssistant'), isUser: false }]);
-  }, [t]);
-
-  const handleSend = async () => {
-    if (!message.trim()) return;
-
-    // Add user message
-    setMessages(prev => [...prev, { text: message, isUser: true }]);
-
-    try {
-      const response = await fetch(`${BASE_URL}/chat/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt: message }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    // Only attempt to load the widget when the chat window is open
+    if (isOpen && !widgetLoaded.current && chatFrameContainerRef.current) {
+      // Clean up any existing chatbot instances
+      const existingScript = document.getElementById('__chatbotSdk__');
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+      
+      const existingIframe = document.getElementById('clickchat-widget');
+      if (existingIframe) {
+        existingIframe.remove();
       }
 
-      const data = await response.json();
-      setMessages(prev => [...prev, { text: data.message, isUser: false }]);
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages(prev => [...prev, { 
-        text: 'Sorry, I encountered an error. Please try again.', 
-        isUser: false 
-      }]);
+      // Create and append the script element
+      const script = document.createElement('script');
+      script.id = '__chatbotSdk__';
+      script.src = 'https://mets.vip/chatbot-sdk.js';
+      script.setAttribute('widgetUrl', 'https://mets.vip');
+      script.setAttribute('baseUrl', 'https://mets.vip/api');
+      script.setAttribute('chatbotId', '67e29d806d03dbe770390674');
+      
+      // Set a flag when loaded
+      script.onload = () => {
+        console.log('Chatbot script loaded successfully');
+        widgetLoaded.current = true;
+        
+        // Wait for iframe to be created then move it into our container
+        setTimeout(() => {
+          const chatIframe = document.getElementById('clickchat-widget');
+          if (chatIframe && chatFrameContainerRef.current) {
+            // Style the iframe to fit our container
+            chatIframe.style.position = 'relative';
+            chatIframe.style.height = '100%';
+            chatIframe.style.width = '100%';
+            chatIframe.style.border = 'none';
+            chatIframe.style.borderRadius = '0';
+            chatIframe.style.bottom = '0';
+            chatIframe.style.right = '0';
+            
+            // Move it into our container
+            chatFrameContainerRef.current.appendChild(chatIframe);
+            console.log('Moved chatbot iframe into our container');
+          } else {
+            console.warn('Chatbot iframe not found or container not ready');
+          }
+        }, 1000);
+      };
+      
+      document.body.appendChild(script);
     }
-
-    setMessage('');
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSend();
-    }
-  };
+    
+    // Cleanup function
+    return () => {
+      // We don't remove the script on component unmount to keep the widget persistent
+      // This is intentional, only clean up if the component is truly being removed
+      if (!isOpen) {
+        const chatIframe = document.getElementById('clickchat-widget');
+        if (chatIframe && chatIframe.parentElement === chatFrameContainerRef.current) {
+          // Only detach, don't remove to preserve widget state
+          chatFrameContainerRef.current.removeChild(chatIframe);
+          document.body.appendChild(chatIframe);
+          chatIframe.style.display = 'none';
+        }
+      }
+    };
+  }, [isOpen]);
 
   return (
     <ChatContainer>
@@ -218,7 +162,7 @@ const FloatingChat = () => {
       </ChatButton>
 
       {isOpen && (
-        <ChatWindow>
+        <ChatWindow ref={chatWindowRef}>
           <ChatHeader>
             <span>{t('aiAssistant')}</span>
             <X 
@@ -226,36 +170,8 @@ const FloatingChat = () => {
               onClick={() => setIsOpen(false)}
             />
           </ChatHeader>
-
-          <ChatBody>
-            {connectionError && (
-              <ErrorMessage>
-                {t('connectionError')}
-              </ErrorMessage>
-            )}
-            {messages.map((msg, index) => (
-              <Message key={index} isUser={msg.isUser}>
-                {msg.text}
-              </Message>
-            ))}
-          </ChatBody>
-
-          <InputArea>
-            <Input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder={t('placeholder')}
-              disabled={isLoading || connectionError}
-            />
-            <SendButton 
-              onClick={handleSend} 
-              disabled={!message.trim() || isLoading || connectionError}
-            >
-              <Send size={18} />
-            </SendButton>
-          </InputArea>
+          
+          <ChatFrameContainer ref={chatFrameContainerRef} />
         </ChatWindow>
       )}
     </ChatContainer>

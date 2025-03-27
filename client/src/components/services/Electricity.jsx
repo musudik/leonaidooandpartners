@@ -1,8 +1,33 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { X } from 'lucide-react';
+import Electricity_Image from '../../assets/ElectricitySavings.jpg'; // You'll need to add this image
+import WhatsAppButton from '../common/WhatsAppButton';
 
 // Styled components
+const PageWrapper = styled.div`
+  padding: 2rem;
+`;
+
+const ContentWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Button = styled.button`
+  background: #774800;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  
+  &:hover {
+    background: #8b5500;
+  }
+`;
+
 const Modal = styled.div`
   position: fixed;
   top: 0;
@@ -46,21 +71,6 @@ const Label = styled.label`
   margin-bottom: 0.5rem;
   color: #333;
   font-size: 0.9rem;
-`;
-
-const Button = styled.button`
-  background: #774800;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin: 0 0.5rem;
-
-  &:hover {
-    background: #8b5500;
-  }
 `;
 
 const FileUploadWrapper = styled.div`
@@ -172,38 +182,93 @@ const Electricity = () => {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        {/* Header Section */}
-        <div className="mt-16">
-          <h1 className="text-6xl font-black mb-4">
-            <span className="text-[#774800]">Electricity</span>
-            <span className="text-[#74767a] ml-2">Savings</span>
-          </h1>
-        </div>
+    <PageWrapper>
+      <ContentWrapper>
+        <div className="bg-white min-h-screen">
+          <div className="max-w-7xl mx-auto px-4 py-16">
+            {/* Header Section */}
+            <div className="mt-16">
+              <h1 className="text-6xl font-black mb-4">
+                <span className="text-[#774800]">Big Savings</span>
+                <span className="text-[#74767a] ml-2">on Strom & Gas</span>
+              </h1>
+              <h2 className="text-2xl text-gray-600 mb-8">Pay Less for the Same Brightness!</h2>
+            </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          {/* Left Column - Text Content */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-xl font-bold mb-3">Description</h2>
-              <p className="text-gray-600">
-                We help you find the best electricity savings for your needs.
-              </p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="mt-4 bg-[#774800] text-white px-6 py-2 rounded-md hover:bg-[#8b5500] transition-colors"
-              >
-                Submit Electricity Bill
-              </button>
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+              {/* Left Column - Text Content */}
+              <div className="space-y-8">
+                <div>
+                  <p className="text-gray-600 mb-6">
+                    Why pay more when you can pay less for the same energy? Your light won't shine any brighter just because your bill is higher—so why overpay for Strom and Gas?
+                  </p>
+                  <p className="text-gray-600">
+                    At Leonaidoo and Partners, we help you secure the best energy deals so you can save hundreds of euros every year without changing your lifestyle.
+                  </p>
+                </div>
+
+                {/* Benefits Section */}
+                <div className="space-y-6">
+                  <ul className="list-none space-y-4">
+                    <li className="flex items-start">
+                      <span className="text-[#774800] mr-2 font-bold">✅</span>
+                      <span>Lower electricity & gas bills</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-[#774800] mr-2 font-bold">✅</span>
+                      <span>Same reliable energy supply</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-[#774800] mr-2 font-bold">✅</span>
+                      <span>Hassle-free switching process</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-[#774800] mr-2 font-bold">✅</span>
+                      <span>More money in your pocket</span>
+                    </li>
+                  </ul>
+                  <div className="space-y-6 mt-8">
+                  <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 className="text-xl font-bold text-[#774800] mb-3">Don't Let High Energy Costs Dim Your Financial Future</h3>
+                    <p className="text-gray-600 mb-4">
+                      Switch today and start saving! Contact us now to find the best rates for your home or business.
+                    </p>
+                    <p className="text-gray-600 font-medium">
+                      Our experts will analyze your current usage and find you the most competitive rates available, saving you time and money.
+                    </p>
+                  </div>
+                </div>
+                </div>
+
+                <div className="mt-8">
+                  <Button onClick={() => setShowForm(true)}>
+                    Submit Your Bill for Comparison
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right Column - Image and Additional Info */}
+              <div className="space-y-8">
+                <div className="relative">
+                  <img 
+                    src={Electricity_Image}
+                    alt="Energy Savings"
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                  <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#c17f59] rounded-full z-10"></div>
+                </div>
+
+                
+              </div>
             </div>
           </div>
         </div>
-        
-        <ElectricityForm isOpen={showForm} onClose={() => setShowForm(false)} />
-      </div>
-    </div>
+      </ContentWrapper>
+      
+      <ElectricityForm isOpen={showForm} onClose={() => setShowForm(false)} />
+      <WhatsAppButton phoneNumber="4917647757767" />
+    </PageWrapper>
   );
 };
 

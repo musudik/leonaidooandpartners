@@ -45,6 +45,11 @@ const Footer = ({ className }) => {
                   Join Our Team
                 </a>
               </div>
+              <div>
+                <p className="text-sm">Our Office:</p>
+                <p className="text-[#f987008c]">Thomas-Dehler-Straße 15a</p>
+                <p className="text-[#f987008c]">81737 München</p>
+              </div>
             </div>
           </div>
 
@@ -80,6 +85,7 @@ const Footer = ({ className }) => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <nav className="flex flex-wrap gap-4">
+              <span className="text-gray-400">Powered by <a href="https://fkgpt.dev" target="_blank" rel="noopener noreferrer" className="text-[#f987008c] hover:text-[#f98700]">fkgpt.dev</a></span>
             </nav>
             <nav className="flex flex-wrap gap-4 text-gray-600">
               <span>© 2024 leonaidoo.com All Rights Reserved.</span>

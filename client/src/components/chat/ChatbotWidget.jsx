@@ -2,11 +2,22 @@ import React, { useEffect } from 'react';
 
 const ChatbotWidget = () => {
   useEffect(() => {
-    // Add custom styles for the chatbot
+    // First, check and remove any existing widget or script
+    const existingScript = document.getElementById('__chatbotSdk__');
+    if (existingScript) {
+      document.body.removeChild(existingScript);
+    }
+    
+    const existingIframe = document.getElementById('clickchat-widget');
+    if (existingIframe) {
+      existingIframe.remove();
+    }
+
+    // Create and add custom styles for the chatbot
     const style = document.createElement('style');
     style.id = 'chatbot-custom-styles';
     style.textContent = `
-      #clickchat-widget.clickchat-widget {
+      #clickchat-widget {
         width: 400px !important;
         height: 600px !important;
         position: fixed !important;
@@ -18,7 +29,7 @@ const ChatbotWidget = () => {
       }
 
       @media (max-width: 480px) {
-        #clickchat-widget.clickchat-widget {
+        #clickchat-widget {
           width: 90% !important;
           height: 80vh !important;
           right: 5% !important;
@@ -28,7 +39,7 @@ const ChatbotWidget = () => {
     `;
     document.head.appendChild(style);
 
-    // Add the chatbot script
+    // Create and add the script element
     const script = document.createElement('script');
     script.id = '__chatbotSdk__';
     script.src = 'https://mets.vip/chatbot-sdk.js';
@@ -36,17 +47,28 @@ const ChatbotWidget = () => {
     script.setAttribute('baseUrl', 'https://mets.vip/api');
     script.setAttribute('chatbotId', '67e29d806d03dbe770390674');
     
+    // Add debugging callbacks
+    script.onload = () => {
+      console.log('Chatbot script loaded successfully');
+    };
+    
+    script.onerror = (error) => {
+      console.error('Error loading chatbot script:', error);
+    };
+    
+    // Add the script to the document body
     document.body.appendChild(script);
 
     // Cleanup function
     return () => {
-      const existingScript = document.getElementById('__chatbotSdk__');
-      const existingStyles = document.getElementById('chatbot-custom-styles');
-      if (existingScript) {
-        document.body.removeChild(existingScript);
+      const cleanupScript = document.getElementById('__chatbotSdk__');
+      if (cleanupScript) {
+        document.body.removeChild(cleanupScript);
       }
-      if (existingStyles) {
-        document.head.removeChild(existingStyles);
+      
+      const cleanupStyles = document.getElementById('chatbot-custom-styles');
+      if (cleanupStyles) {
+        document.head.removeChild(cleanupStyles);
       }
     };
   }, []);

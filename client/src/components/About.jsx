@@ -60,16 +60,17 @@ const About = () => {
             <span className="text-[#74767a] ml-2">Us</span>
           </h1>
         </div>
-        {/* Map Section */}
+        {/* Map Section - Updated to the new address */}
         <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">On a Map</h2>
             <div className="bg-white p-2 rounded-xl shadow-sm">
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2660.477536778437!2d11.631706612809703!3d48.17814997112794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e74e5786ed277%3A0xe681d1f5f4a2624d!2sFeringastra%C3%9Fe%2010A%2C%2085774%20Unterf%C3%B6hring%2C%20Germany!5e0!3m2!1sen!2sus!4v1734600856447!5m2!1sen!2sus"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.1290203374296!2d11.63389091570935!3d48.10638467922169!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479dd6c767a4d7a3%3A0x6c4a6bc11eaa4af3!2sThomas-Dehler-Stra%C3%9Fe%2015a%2C%2081737%20M%C3%BCnchen%2C%20Germany!5e0!3m2!1sen!2sus!4v1717533100918!5m2!1sen!2sus"
                 className="w-full h-[300px] rounded-lg"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
             </div>
         </div>
@@ -82,13 +83,23 @@ const About = () => {
                 <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Address</h2>
                 <div className="bg-white p-6 rounded-xl shadow-sm">
-                    <div className="flex items-start gap-4 mb-4">
+                    {/* <div className="flex items-start gap-4 mb-6">
                     <MapPin className="w-6 h-6 text-[#774800]" />
                     <div>
                         <p className="font-medium text-gray-900">Feringastraße 10a</p>
                         <p className="text-gray-600">85774 Unterföhring, Germany</p>
                     </div>
+                    </div> */}
+                    
+                    {/* New Address */}
+                    <div className="flex items-start gap-4 mb-4">
+                    <MapPin className="w-6 h-6 text-[#774800]" />
+                    <div>
+                        <p className="font-medium text-gray-900">Thomas-Dehler-Straße 15a</p>
+                        <p className="text-gray-600">81737 München, Germany</p>
                     </div>
+                    </div>
+                    
                     <h3 className="font-bold text-gray-900 mt-6 mb-4">Online</h3>
                     <div className="space-y-3">
                     <div className="flex items-center gap-4">

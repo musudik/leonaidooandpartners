@@ -93,21 +93,12 @@ const Navbar = () => {
     {
         name: 'Insurance',
         icon: 'insurance',
-        subItems: [
-          { name: 'Car Insurance', icon: 'car', path: '/insurance/car' },
-          { name: 'Disability Insurance', icon: 'disability', path: '/insurance/disability' },
-          { name: 'Health Insurance', icon: 'health', path: '/insurance/health' },
-          { name: 'Liability Insurance', icon: 'liability', path: '/insurance/liability' },
-        ],
+        path: '/insurance',
     },
     {
       name: 'Loans',
       icon: 'loans',
-      subItems: [
-        { name: 'Business Loans', icon: 'briefcase', path: '/loans/business' },
-        { name: 'Personal Loans', icon: 'personal', path: '/loans/personal' },
-        { name: 'Student Loans', icon: 'student', path: '/loans/student' },
-      ],
+      path: '/loans',      
     },
     {
         name: 'Pension & Retirement',
@@ -118,14 +109,15 @@ const Navbar = () => {
         name: 'Real Estate',
         icon: 'realEstate',
         subItems: [
-            { name: 'Properties', icon: 'realEstate', path: '/realEstate/properties' },
             { name: 'Real Estate Finance', icon: 'realEstate', path: '/realEstate/finance' },
+            { name: 'Properties', icon: 'realEstate', path: '/realEstate/properties' },
           ],
     },
     {
         name: 'Other Services',
         icon: 'CircleDollarSign',
         subItems: [
+          { name: 'Investments', icon: 'investments', path: '/investments' },
           { name: 'Bank Accounts', icon: 'bankAccounts', path: '/bank-accounts' },
           { name: 'Electricity', icon: 'electricity', path: '/electricity' },
           { name: 'Gold', icon: 'gold', path: '/gold' },

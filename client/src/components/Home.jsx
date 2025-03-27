@@ -18,15 +18,18 @@ import { useState } from 'react';
 //import ScheduleModal from './ScheduleModal';
 
 const TeamSection = styled.div`
-  padding: 4rem 0;
+  padding: 3rem 0;
   text-align: center;
+  background-color: #f9f5f0;
 `;
 
 const TeamHeader = styled.h2`
   font-size: 2.5rem;
+  margin-bottom: 2rem;
   
   span {
     font-weight: bold;
+    color: #774800;
   }
 `;
 
@@ -51,129 +54,16 @@ const TeamGrid = styled.div`
   }
 `;
 
-const ServicesSection = styled.section`
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0.5rem;
-`;
-
-const ServiceTitle = styled.h2`
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1.5rem;
-`;
-
-const ServiceLink = styled(Link)`
-  text-decoration: none;
-  display: block;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: #f9f5f0;
-    transform: translateX(10px);
-    box-shadow: 0 2px 8px rgba(119, 72, 0, 0.1);
-    
-    h3 {
-      color: #8b5500;
-    }
-  }
-`;
-
-const ServiceItem = styled.div`
-  h3 {
-    color: #774800;
-    font-size: 1.1rem;
-    font-weight: 600;
-    display: inline-block;
-    transition: color 0.3s ease;
-  }
-  
-  p {
-    color: #555;
-    font-size: 0.95rem;
-    display: inline;
-  }
-`;
-
-const SubServiceList = styled.ul`
-  list-style: none;
-  padding-left: 1.2rem;
-  margin: 0.5rem 0;
-`;
-
-const SubServiceItem = styled.li`
-  color: #666;
-  font-size: 0.9rem;
-  font-style: italic;
-  
-  strong {
-    color: #774800;
-    font-style: normal;
-  }
-`;
-
-const WhyChooseSection = styled.section`
-  padding: 2rem 0;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-`;
-
-const ContactButton = styled.button`
-  background: #774800;
-  color: white;
-  padding: 0.7rem 2rem;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(119, 72, 0, 0.15);
-  margin: 2rem 0;
-
-  &:hover {
-    background: #8b5500;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 6px rgba(119, 72, 0, 0.2);
-  }
-`;
-
-const PartnersSection = styled.div`
-  background: #f9f5f0;
-  padding: 2rem 0;
-  margin-top: 3rem;
-  border-top: 3px solid #774800;
-`;
-
-const PartnersGrid = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 1rem;
-
-  img {
-    height: 35px;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-`;
-
 const ActionButtons = styled.div`
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-top: 2rem;
+  margin: 3rem 0;
+  
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Button = styled.button`
@@ -185,10 +75,60 @@ const Button = styled.button`
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-width: 220px;
 
   &:hover {
     background: #8b5500;
     transform: translateY(-2px);
+  }
+  
+  @media (max-width: 640px) {
+    width: 100%;
+    max-width: 280px;
+  }
+`;
+
+const PartnersSection = styled.div`
+  background: #f9f5f0;
+  padding: 3rem 0;
+  margin-top: 0;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+`;
+
+const PartnersTitle = styled.h3`
+  font-size: 1.8rem;
+  color: #774800;
+  margin-bottom: 2rem;
+  font-weight: 600;
+`;
+
+const PartnersGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  img {
+    height: 40px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    gap: 2rem;
+    
+    img {
+      height: 30px;
+    }
   }
 `;
 
@@ -250,46 +190,51 @@ const Profile = () => {
   return (
     <div className="page-container bg-white min-h-screen">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-0">
-        {/* Hero Section */}
+        {/* Hero Section - Reverted back to original */}
         <Carousel />
         <div className="grid gap-12 items-center">
-            {/* Replace the old Services section with the new ServiceSection component */}
-            <ServiceSection />
+          {/* Main Service Section */}
+          <ServiceSection />
 
-            {/* Why Choose Us Section */}
-              <ActionButtons>
-                <Button onClick={() => setIsContactFormOpen(true)}>
-                  GET CONTACT
-                </Button>
-                <Button onClick={() => setIsScheduleModalOpen(true)}>
-                  SCHEDULE CONSULTATION
-                </Button>
-              </ActionButtons>
+          {/* Call to Action Buttons - Keeping improved version */}
+          <ActionButtons>
+            <Button onClick={() => setIsContactFormOpen(true)}>
+              GET IN TOUCH
+            </Button>
+            <Button onClick={() => setIsScheduleModalOpen(true)}>
+              SCHEDULE CONSULTATION
+            </Button>
+          </ActionButtons>
         </div>
         
-        {/* Partners Section */}
+        {/* Partners Section - Keeping improved version */}
         <PartnersSection>
-          <PartnersGrid>
-            {partners.map((partner, index) => (
-              <img
-                key={index}
-                src={partner.src}
-                alt={partner.alt}
-              />
-            ))}
-          </PartnersGrid>
+          <div className="max-w-6xl mx-auto px-4">
+            <PartnersTitle>Our Trusted Partners</PartnersTitle>
+            <PartnersGrid>
+              {partners.map((partner, index) => (
+                <img
+                  key={index}
+                  src={partner.src}
+                  alt={partner.alt}
+                />
+              ))}
+            </PartnersGrid>
+          </div>
         </PartnersSection>
 
-        {/* Team Section */}
+        {/* Team Section - Keeping improved version */}
         <TeamSection>
-          <TeamHeader>
-            Meet the <span>team</span>
-          </TeamHeader>
-          <TeamGrid>
-            {teamMembers.map((member, index) => (
-              <TeamMember key={index} member={member} />
-            ))}
-          </TeamGrid>
+          <div className="max-w-6xl mx-auto px-4">
+            <TeamHeader>
+              Meet the <span>team</span>
+            </TeamHeader>
+            <TeamGrid>
+              {teamMembers.map((member, index) => (
+                <TeamMember key={index} member={member} />
+              ))}
+            </TeamGrid>
+          </div>
         </TeamSection>
       </div>
 
