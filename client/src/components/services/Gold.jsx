@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Gold_Image from '../../assets/Gold_Investment.jpg'; // You'll need to add this image
+import Gold_Image from '../../assets/Gold_investment.jpg'; // You'll need to add this image
 import WhatsAppButton from '../common/WhatsAppButton';
 
 const PageWrapper = styled.div`
