@@ -24,7 +24,7 @@ import {
   Gift,
   Contact
 } from 'lucide-react';
-import logo from './../assets/LEONAIDOO.png';
+import logo from './../assets/Leo2025.png';
 
 const MenuItem = ({ item, isActive }) => {
   const [isOpen, setIsOpen] = useState(false);
