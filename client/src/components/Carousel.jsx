@@ -3,9 +3,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled, { keyframes, css } from "styled-components";
-import hero1 from '../assets/Hero1.jpg';
-import hero2 from '../assets/Hero2.jpg';
-import hero3 from '../assets/Hero3.jpg';
+import hero1 from '../assets/1.png';
+import hero2 from '../assets/2.png';
+import hero3 from '../assets/3.png';
 
 const CarouselContainer = styled.div`
   position: relative;

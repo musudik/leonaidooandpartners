@@ -110,7 +110,6 @@ const Navbar = () => {
         icon: 'realEstate',
         subItems: [
             { name: 'Real Estate Finance', icon: 'realEstate', path: '/realEstate/finance' },
-            { name: 'Properties', icon: 'realEstate', path: '/realEstate/properties' },
           ],
     },
     {

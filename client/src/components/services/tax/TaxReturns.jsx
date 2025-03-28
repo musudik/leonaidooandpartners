@@ -33,7 +33,7 @@ const TaxReturns = () => {
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   const handleOpenForm = () => {
-    setIsFormOpen(true);
+    window.open('https://wealth-coach.replit.app/form/tax-return', '_blank');
   };
 
   const handleCloseForm = () => {

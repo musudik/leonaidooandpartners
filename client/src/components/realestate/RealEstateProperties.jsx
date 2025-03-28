@@ -7,10 +7,10 @@ const RealEstateProperties = () => {
         <div className="max-w-7xl mx-auto px-4 py-16">
           {/* Header Section */}
           <div className="mt-16">
-            <h1 className="text-6xl font-black mb-4">
+           {/*  <h1 className="text-6xl font-black mb-4">
               <span className="text-[#774800]">Real Estate</span>
               <span className="text-[#74767a] ml-2">Properties</span>
-            </h1>
+            </h1> */}
           </div>
   
           {/* Main Content Grid */}
@@ -18,9 +18,10 @@ const RealEstateProperties = () => {
             {/* Left Column - Text Content */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-xl font-bold mb-3">Coming Soon</h2>
-                <p className="text-gray-600">
-                </p>
+                <h1 className="text-6xl font-black mb-4">
+                  <span className="text-[#774800]">Coming</span>
+                  <span className="text-[#74767a] ml-2"> Soon</span>
+                </h1>
               </div>
             </div>
           </div>

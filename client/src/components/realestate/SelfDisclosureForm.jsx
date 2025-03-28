@@ -7,7 +7,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Grid } from '@mui/material';
 import { translations } from '../../translations';
-import logo from '../../../assets/LEONAIDOO.png';
+import logo from '../../../assets/Leo2025.png';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
